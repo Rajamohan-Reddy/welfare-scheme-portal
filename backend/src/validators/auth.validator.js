@@ -45,11 +45,11 @@ export const validateRegister = ({
   };
 };
 
-export const validateLogin = ({ email, password }) => {
+export const validateLogin = ({ identifier, password }) => {
   const errors = [];
 
-  if (!email?.trim()) {
-    errors.push("Email is required");
+  if (!identifier?.trim()) {
+    errors.push("Email or phone number is required");
   }
 
   if (!password) {
