@@ -201,49 +201,382 @@ Organizes welfare schemes by category.
 
 # Schemes Collection
 
-## Purpose
+# Collection: schemes
 
-Stores all welfare schemes available in the portal.
+Purpose:
 
----
+Stores all welfare schemes created and managed by administrators.
 
-## Examples
+Examples:
 
 - Amma Vodi
-- Old Age Pension
-- Widow Pension
-- Scholarship Scheme
-- Housing Scheme
+- NTR Bharosa Pension
+- Rythu Bharosa
+- Cheyutha
+- Vidya Deevena
+- Vasathi Deevena
 
 ---
 
-## Fields
+## Schema Structure
 
-- schemeCode
-- schemeName
-- categoryId
-- description
-- eligibilityCriteria
-- requiredDocuments
-- applicationFields
-- startDate
-- endDate
-- isActive
-- createdBy
-- createdAt
-- updatedAt
+schemeCode
+
+Type:
+String
+
+Example:
+
+AMMAVODI
+
+Description:
+
+Unique scheme identifier.
 
 ---
-
-## Indexes
-
-schemeCode → Unique
 
 schemeName
 
-categoryId
+Type:
+String
+
+Example:
+
+Amma Vodi
+
+Description:
+
+Official scheme name.
+
+---
+
+description
+
+Type:
+String
+
+Description:
+
+Detailed scheme explanation.
+
+---
+
+department
+
+Type:
+String
+
+Examples:
+
+EDUCATION
+
+AGRICULTURE
+
+SOCIAL_WELFARE
+
+HEALTH
+
+WOMEN_AND_CHILD_WELFARE
+
+Description:
+
+Department responsible for scheme execution.
+
+---
+
+benefitType
+
+Type:
+String
+
+Allowed Values:
+
+DIRECT_BENEFIT_TRANSFER
+
+PENSION
+
+SCHOLARSHIP
+
+SUBSIDY
+
+REIMBURSEMENT
+
+Description:
+
+Type of financial benefit.
+
+---
+
+benefitAmount
+
+Type:
+Number
+
+Example:
+
+15000
+
+Description:
+
+Benefit amount provided to eligible citizens.
+
+---
+
+media
+
+Type:
+Object
+
+Fields:
+
+bannerImage
+
+thumbnailImage
+
+galleryImages
+
+guidelinesDocument
+
+governmentOrderDocument
+
+Example:
+
+{
+bannerImage:
+"/uploads/schemes/banner/amma-vodi.jpg",
+
+thumbnailImage:
+"/uploads/schemes/thumbnail/amma-vodi.jpg",
+
+galleryImages: [
+"/uploads/schemes/gallery/img1.jpg",
+"/uploads/schemes/gallery/img2.jpg"
+],
+
+guidelinesDocument:
+"/uploads/schemes/documents/guidelines.pdf",
+
+governmentOrderDocument:
+"/uploads/schemes/documents/go.pdf"
+}
+
+Description:
+
+Stores all scheme related media and documents.
+
+---
+
+eligibility
+
+Type:
+Object
+
+Fields:
+
+minAge
+
+maxAge
+
+gender
+
+maxAnnualIncome
+
+casteCategories
+
+studentRequired
+
+farmerRequired
+
+widowRequired
+
+disabledRequired
+
+Example:
+
+{
+minAge: 18,
+
+maxAge: 60,
+
+gender: ["FEMALE"],
+
+maxAnnualIncome: 120000,
+
+casteCategories: [
+"SC",
+"ST",
+"BC"
+],
+
+studentRequired: false,
+
+farmerRequired: false,
+
+widowRequired: false,
+
+disabledRequired: false
+}
+
+Description:
+
+Stores all eligibility rules.
+
+---
+
+requiredDocuments
+
+Type:
+Array<String>
+
+Example:
+
+[
+"AADHAAR",
+"RATION_CARD",
+"INCOME_CERTIFICATE"
+]
+
+Description:
+
+Mandatory documents required during application.
+
+---
+
+applicationFields
+
+Type:
+Array<String>
+
+Example:
+
+[
+"bankAccountNumber",
+"ifscCode",
+"collegeName"
+]
+
+Description:
+
+Dynamic fields required by the scheme.
+
+---
+
+startDate
+
+Type:
+Date
+
+Description:
+
+Scheme application start date.
+
+---
+
+endDate
+
+Type:
+Date
+
+Description:
+
+Scheme application end date.
+
+---
 
 isActive
+
+Type:
+Boolean
+
+Default:
+
+true
+
+Description:
+
+Controls whether citizens can apply.
+
+---
+
+createdBy
+
+Type:
+ObjectId
+
+Reference:
+
+User
+
+Description:
+
+Administrator who created the scheme.
+
+---
+
+updatedBy
+
+Type:
+ObjectId
+
+Reference:
+
+User
+
+Description:
+
+Administrator who last modified the scheme.
+
+---
+
+createdAt
+
+Type:
+Date
+
+Description:
+
+Automatic creation timestamp.
+
+---
+
+updatedAt
+
+Type:
+Date
+
+Description:
+
+Automatic update timestamp.
+
+---
+
+Indexes
+
+1. schemeCode (Unique)
+
+2. department
+
+3. isActive
+
+---
+
+Future Relationships
+
+Scheme
+↓
+Applications
+
+Scheme
+↓
+Required Documents
+
+Scheme
+↓
+Eligibility Validation
+
+Scheme
+↓
+Dashboard Analytics
 
 ---
 
