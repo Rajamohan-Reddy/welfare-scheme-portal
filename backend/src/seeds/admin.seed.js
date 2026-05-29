@@ -1,16 +1,20 @@
 import bcrypt from "bcryptjs";
 import { User } from "../models/user.model.js";
 import { env } from "../config/env.config.js";
+import { connectDB } from "../config/db.config.js";
+import { ROLES } from "../constants/roles.constants.js";
 
-export const seedAdmin = async () => {
+const seedAdmin = async () => {
   try {
+    await connectDB();
+
     const existingAdmin = await User.findOne({
-      role: "ADMIN",
+      role: ROLES.ADMIN,
     });
 
     if (existingAdmin) {
       console.log("Admin already exists");
-      return;
+      process.exit(0);
     }
 
     const hashedPassword = await bcrypt.hash(env.adminPassword, 10);
@@ -25,7 +29,7 @@ export const seedAdmin = async () => {
 
       phoneNumber: "9999999999",
 
-      role: "ADMIN",
+      role: ROLES.ADMIN,
 
       isActive: true,
 
@@ -33,7 +37,13 @@ export const seedAdmin = async () => {
     });
 
     console.log("Default admin created successfully");
+
+    process.exit(0);
   } catch (error) {
     console.error("Admin seed failed:", error.message);
+
+    process.exit(1);
   }
 };
+
+seedAdmin();

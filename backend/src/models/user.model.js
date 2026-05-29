@@ -126,8 +126,6 @@ const userSchema = new mongoose.Schema(
   },
 );
 
-userSchema.index({ email: 1 }, { unique: true });
-userSchema.index({ phoneNumber: 1 }, { unique: true });
 userSchema.index(
   { aadhaarNumber: 1 },
   {
@@ -135,7 +133,9 @@ userSchema.index(
     sparse: true,
   },
 );
+
 userSchema.index({ role: 1 });
+
 userSchema.index({ isActive: 1 });
 
 export const User = mongoose.model("User", userSchema);

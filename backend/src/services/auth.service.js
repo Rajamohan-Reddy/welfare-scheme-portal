@@ -43,7 +43,29 @@ export const registerCitizen = async ({
     role: ROLES.CITIZEN,
   });
 
-  return user;
+  const userResponse = {
+    _id: user._id,
+
+    firstName: user.firstName,
+
+    lastName: user.lastName,
+
+    email: user.email,
+
+    phoneNumber: user.phoneNumber,
+
+    role: user.role,
+
+    isActive: user.isActive,
+
+    isProfileCompleted: user.isProfileCompleted,
+
+    createdAt: user.createdAt,
+
+    updatedAt: user.updatedAt,
+  };
+
+  return userResponse;
 };
 
 export const loginUser = async ({ identifier, password }) => {
@@ -87,10 +109,29 @@ export const loginUser = async ({ identifier, password }) => {
 
   await user.save();
 
-  const userResponse = user.toObject();
+  const userResponse = {
+    _id: user._id,
 
-  delete userResponse.password;
-  delete userResponse.refreshToken;
+    firstName: user.firstName,
+
+    lastName: user.lastName,
+
+    email: user.email,
+
+    phoneNumber: user.phoneNumber,
+
+    role: user.role,
+
+    isActive: user.isActive,
+
+    isProfileCompleted: user.isProfileCompleted,
+
+    lastLoginAt: user.lastLoginAt,
+
+    createdAt: user.createdAt,
+
+    updatedAt: user.updatedAt,
+  };
 
   return {
     user: userResponse,
@@ -137,5 +178,45 @@ export const getCurrentUser = async (userId) => {
     throw new Error("User not found");
   }
 
-  return user;
+  return {
+    _id: user._id,
+
+    firstName: user.firstName,
+
+    lastName: user.lastName,
+
+    email: user.email,
+
+    phoneNumber: user.phoneNumber,
+
+    role: user.role,
+
+    isActive: user.isActive,
+
+    isProfileCompleted: user.isProfileCompleted,
+
+    lastLoginAt: user.lastLoginAt,
+
+    createdAt: user.createdAt,
+
+    updatedAt: user.updatedAt,
+  };
 };
+
+//we can return this way also
+// const user = await User.create({
+//   firstName,
+//   lastName,
+//   email: email.toLowerCase(),
+//   phoneNumber,
+//   password: hashedPassword,
+//   role: ROLES.CITIZEN,
+// });
+
+// const userResponse =
+//   user.toObject();
+
+// delete userResponse.password;
+// delete userResponse.refreshToken;
+
+// return userResponse;

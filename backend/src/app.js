@@ -4,8 +4,8 @@ import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 
-import { notFoundMiddleware } from "./middleware/not-found.middleware.js";
-import { errorMiddleware } from "./middleware/error.middleware.js";
+import healthRoutes from "./routes/health.routes.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -18,23 +18,14 @@ app.use(
   }),
 );
 
-app.use(morgan("dev"));
-
 app.use(express.json());
 
 app.use(cookieParser());
 
-app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
 
-app.get("/api/v1/health", (req, res) => {
-  return res.status(200).json({
-    success: true,
-    message: "Server is running",
-  });
-});
+app.use("/api/v1/health", healthRoutes);
 
-app.use(notFoundMiddleware);
-
-app.use(errorMiddleware);
+app.use("/api/v1/auth", authRoutes);
 
 export default app;
