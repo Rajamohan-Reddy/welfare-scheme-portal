@@ -2,70 +2,37 @@
 
 ## Overview
 
-The Welfare Scheme Portal provides separate dashboards for:
+The portal provides dashboards for:
 
 1. Citizen
 2. Officer
 3. Admin
 
-Each dashboard displays relevant statistics, charts, recent activities, and application information.
+Dashboard data is generated dynamically from database records.
 
 ---
 
 # Citizen Dashboard
 
-## Purpose
+## Statistics Cards
 
-Allows citizens to monitor their welfare applications and status.
-
----
-
-## Dashboard Cards
-
-### Total Applications
-
-Shows total applications submitted by the citizen.
-
----
-
-### Approved Applications
-
-Shows total approved applications.
-
----
-
-### Rejected Applications
-
-Shows total rejected applications.
-
----
-
-### Pending Applications
-
-Shows applications currently under verification.
+- Total Applications
+- Approved Applications
+- Rejected Applications
+- Pending Applications
 
 ---
 
 ## Pie Chart
 
-### My Applications Status Distribution
+My Application Status Distribution
 
-Displays:
+Statuses:
 
 - Approved
 - Rejected
 - Under Verification
 - Correction Required
-
-Example:
-
-Approved → 5
-
-Rejected → 2
-
-Under Verification → 3
-
-Correction Required → 1
 
 ---
 
@@ -82,140 +49,64 @@ Columns:
 
 # Officer Dashboard
 
-## Purpose
+## Statistics Cards
 
-Allows officers to manage verification workload.
-
----
-
-## Dashboard Cards
-
-### Assigned Applications
-
-Total applications assigned to officer.
-
----
-
-### Pending Verification
-
-Applications waiting for review.
-
----
-
-### Approved Today
-
-Applications approved today.
-
----
-
-### Rejected Today
-
-Applications rejected today.
+- Assigned Applications
+- Pending Verification
+- Approved Applications
+- Rejected Applications
 
 ---
 
 ## Pie Chart
 
-### Application Status Distribution
-
-Displays:
-
-- Under Verification
-- Verified
-- Approved
-- Rejected
+Verification Status Distribution
 
 ---
 
 ## Bar Chart
 
-### Daily Processing Statistics
+Daily Application Processing
 
-Shows number of applications processed per day.
+Columns:
 
-Example:
-
-Monday → 20
-
-Tuesday → 15
-
-Wednesday → 25
-
-Thursday → 30
-
-Friday → 18
+- Date
+- Applications Processed
 
 ---
 
-## Assigned Applications Table
+## Applications Table
 
 Columns:
 
 - Application Number
 - Applicant Name
 - Scheme Name
-- Current Status
+- Status
 - Submitted Date
 
 ---
 
 # Admin Dashboard
 
-## Purpose
+## Statistics Cards
 
-Provides complete system overview.
-
----
-
-## Dashboard Cards
-
-### Total Citizens
-
-Total registered citizens.
-
----
-
-### Total Officers
-
-Total officers in system.
-
----
-
-### Total Schemes
-
-Active welfare schemes.
-
----
-
-### Total Applications
-
-Total submitted applications.
-
----
-
-### Approved Applications
-
-Total approved applications.
-
----
-
-### Rejected Applications
-
-Total rejected applications.
-
----
-
-### Pending Verification
-
-Applications currently under review.
+- Total Users
+- Total Admins
+- Total Officers
+- Total Citizens
+- Active Users
+- Inactive Users
+- Total Schemes
+- Total Applications
 
 ---
 
 ## Pie Chart
 
-### Application Status Distribution
+Application Status Distribution
 
-Displays:
+Statuses:
 
 - Approved
 - Rejected
@@ -226,37 +117,20 @@ Displays:
 
 ## Bar Chart
 
-### Scheme Wise Applications
+Scheme Wise Applications
 
-Shows applications count by scheme.
+Examples:
 
-Example:
-
-Amma Vodi → 250
-
-Old Age Pension → 180
-
-Scholarship → 150
-
-Housing Scheme → 95
+- Amma Vodi
+- Pension Scheme
+- Scholarship Scheme
+- Housing Scheme
 
 ---
 
 ## Monthly Trend Chart
 
-Displays:
-
-Applications submitted per month.
-
-Example:
-
-January → 120
-
-February → 145
-
-March → 210
-
-April → 180
+Applications Submitted Per Month
 
 ---
 
@@ -265,44 +139,36 @@ April → 180
 Columns:
 
 - Application Number
-- Applicant
-- Scheme
+- Applicant Name
+- Scheme Name
+- Assigned Officer
 - Status
-- Officer
 - Submitted Date
 
 ---
 
-# Dashboard API Requirements
+# Dashboard APIs
 
 Citizen Dashboard
 
-GET
-
-/api/v1/dashboard/citizen
+GET /api/v1/dashboard/citizen
 
 ---
 
 Officer Dashboard
 
-GET
-
-/api/v1/dashboard/officer
+GET /api/v1/dashboard/officer
 
 ---
 
 Admin Dashboard
 
-GET
-
-/api/v1/dashboard/admin
+GET /api/v1/dashboard/admin
 
 ---
 
-# Dashboard Data Source
+# Analytics Strategy
 
-Dashboard values must always be generated from database records.
+Dashboard values are generated using MongoDB Aggregation Pipelines.
 
-Never store dashboard counts separately.
-
-All charts and statistics must be calculated dynamically.
+Dashboard data is never stored separately.

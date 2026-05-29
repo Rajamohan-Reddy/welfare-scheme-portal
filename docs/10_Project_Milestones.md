@@ -1,83 +1,81 @@
 # Project Milestones
 
-## Project Timeline
-
-The project will be developed in phases.
-
-Each phase must be completed, tested, documented, and committed before moving to the next phase.
-
----
-
-# Milestone 1
+## Milestone 1
 
 Project Setup
 
-Status: Pending
-
 Tasks:
 
-- Create Repository
-- Create Branches
-- Configure Team Access
-- Create Project Structure
-- Create Documentation
-- Configure Development Environment
+- Repository Setup
+- Branch Setup
+- Documentation
+- Project Structure
 
-Deliverables:
+Status:
 
-- Repository Ready
-- Documentation Complete
+Pending
 
 ---
 
-# Milestone 2
+## Milestone 2
 
-Backend Initialization
-
-Status: Pending
+Backend Foundation
 
 Tasks:
 
-- Setup Node.js Project
-- Configure Express
-- Setup Environment Variables
-- Configure MongoDB Connection
-- Setup Common Middleware
-- Configure Error Handling
-
-Deliverables:
-
-- Running Backend Server
+- Express Setup
+- Environment Configuration
 - MongoDB Connection
+- Error Handling
+- Response Utilities
+- Constants
+
+Status:
+
+Pending
 
 ---
 
-# Milestone 3
+## Milestone 3
 
 Authentication Module
 
-Status: Pending
-
 Tasks:
 
-- Register Citizen
+- Citizen Registration
 - Login
 - JWT Authentication
 - Password Hashing
 - Protected Routes
 - Role Authorization
 
-Deliverables:
+Status:
 
-- Working Authentication APIs
+Pending
 
 ---
 
-# Milestone 4
+## Milestone 4
+
+User Management Module
+
+Tasks:
+
+- Create Admin
+- Create Officer
+- View Users
+- Activate User
+- Deactivate User
+
+Status:
+
+Pending
+
+---
+
+## Milestone 5
 
 Scheme Management Module
-
-Status: Pending
 
 Tasks:
 
@@ -86,20 +84,16 @@ Tasks:
 - Update Schemes
 - Disable Schemes
 - Search Schemes
-- Filter Schemes
 
-Deliverables:
+Status:
 
-- Scheme APIs
-- Scheme Management Screens
+Pending
 
 ---
 
-# Milestone 5
+## Milestone 6
 
 Application Management Module
-
-Status: Pending
 
 Tasks:
 
@@ -108,41 +102,35 @@ Tasks:
 - Edit Application
 - Delete Application
 - Application History
-- Status Tracking
 
-Deliverables:
+Status:
 
-- Application APIs
-- Application Workflow
+Pending
 
 ---
 
-# Milestone 6
+## Milestone 7
 
 Verification Module
 
-Status: Pending
-
 Tasks:
 
-- Assign Applications
+- Assign Officer
 - Verify Application
 - Request Correction
 - Approve Application
 - Reject Application
 - Timeline Tracking
 
-Deliverables:
+Status:
 
-- Verification Workflow Complete
+Pending
 
 ---
 
-# Milestone 7
+## Milestone 8
 
 Dashboard Module
-
-Status: Pending
 
 Tasks:
 
@@ -153,17 +141,15 @@ Tasks:
 - Bar Charts
 - Statistics APIs
 
-Deliverables:
+Status:
 
-- Complete Dashboard
+Pending
 
 ---
 
-# Milestone 8
+## Milestone 9
 
 Notifications Module
-
-Status: Pending
 
 Tasks:
 
@@ -172,36 +158,33 @@ Tasks:
 - Rejection Notifications
 - Correction Notifications
 
-Deliverables:
+Status:
 
-- Notification System
+Pending
 
 ---
 
-# Milestone 9
+## Milestone 10
 
 Audit Logs Module
-
-Status: Pending
 
 Tasks:
 
 - Login Logs
+- User Management Logs
 - Scheme Logs
 - Application Logs
 - Approval Logs
 
-Deliverables:
+Status:
 
-- Audit Tracking System
+Pending
 
 ---
 
-# Milestone 10
+## Milestone 11
 
 Testing
-
-Status: Pending
 
 Tasks:
 
@@ -211,34 +194,30 @@ Tasks:
 - Workflow Testing
 - Dashboard Testing
 
-Deliverables:
+Status:
 
-- Tested Application
+Pending
 
 ---
 
-# Milestone 11
+## Milestone 12
 
 Deployment
 
-Status: Pending
-
 Tasks:
 
-- Backend Deployment
 - Frontend Deployment
+- Backend Deployment
 - Database Configuration
-- Production Environment Variables
+- Environment Variables
 
-Deliverables:
+Status:
 
-- Live Application
+Pending
 
 ---
 
-# Final Submission
-
-Required Deliverables
+# Final Deliverables
 
 - Frontend Source Code
 - Backend Source Code
@@ -249,16 +228,24 @@ Required Deliverables
 
 ---
 
-# Project Success Criteria
+# Success Criteria
 
-The project will be considered complete when:
+✓ Authentication Working
 
-- Authentication works correctly
-- Role-based access is implemented
-- Scheme management works
-- Application workflow works
-- Verification workflow works
-- Dashboards display correct statistics
-- Reports are generated correctly
-- Documentation is complete
-- Application is deployed successfully
+✓ User Management Working
+
+✓ Scheme Management Working
+
+✓ Application Workflow Working
+
+✓ Verification Workflow Working
+
+✓ Dashboard Analytics Working
+
+✓ Notifications Working
+
+✓ Audit Logs Working
+
+✓ Documentation Updated
+
+✓ Deployment Successful

@@ -2,8 +2,10 @@
 
 | Feature                    | Citizen | Officer | Admin |
 | -------------------------- | ------- | ------- | ----- |
-| Register                   | YES     | NO      | NO    |
+| Register Account           | YES     | NO      | NO    |
 | Login                      | YES     | YES     | YES   |
+| View Profile               | YES     | YES     | YES   |
+| Update Profile             | YES     | YES     | YES   |
 | View Schemes               | YES     | YES     | YES   |
 | Search Schemes             | YES     | YES     | YES   |
 | Apply For Scheme           | YES     | NO      | NO    |
@@ -17,84 +19,56 @@
 | Approve Application        | NO      | YES     | YES   |
 | Reject Application         | NO      | YES     | YES   |
 | Add Remarks                | NO      | YES     | YES   |
+| View Notifications         | YES     | YES     | YES   |
 | Create Scheme              | NO      | NO      | YES   |
 | Update Scheme              | NO      | NO      | YES   |
 | Disable Scheme             | NO      | NO      | YES   |
+| View Users                 | NO      | NO      | YES   |
+| Create Admin               | NO      | NO      | YES   |
 | Create Officer             | NO      | NO      | YES   |
-| Manage Officers            | NO      | NO      | YES   |
-| View Dashboard             | YES     | YES     | YES   |
+| Activate User              | NO      | NO      | YES   |
+| Deactivate User            | NO      | NO      | YES   |
 | View Reports               | NO      | YES     | YES   |
+| View Dashboard             | YES     | YES     | YES   |
 | View Audit Logs            | NO      | NO      | YES   |
 
 ---
 
-# Authorization Strategy
+# User Creation Rules
 
-Every protected endpoint must validate:
+Citizen
 
-1. JWT Token
+- Self Registration
 
-2. User Authentication
+Officer
 
-3. User Role
+- Created By Admin
 
-4. Permission Access
+Admin
 
----
-
-# Middleware Usage
-
-Authentication Middleware
-
-Validates:
-
-- JWT Token
-- User Existence
+- Seed Process
+- Created By Existing Admin
 
 ---
 
-Authorization Middleware
+# Resource Ownership Rules
 
-Validates:
+Citizen:
 
-- Citizen Access
-- Officer Access
-- Admin Access
+Can only access their own applications.
 
-Example:
+Officer:
 
-Admin Only Routes
+Can only access applications assigned to them.
 
-Create Scheme
+Admin:
 
-Delete Scheme
-
-Manage Officers
-
-View Audit Logs
+Can access all records.
 
 ---
 
 # Security Principle
 
-Users should only access resources they own or are authorized to manage.
+Least Privilege Access.
 
-Examples:
-
-Citizen
-
-Can only view own applications.
-
-Cannot view another citizen's application.
-
----
-
-Officer
-
-Can only manage assigned applications.
-
----
-
-Admin
-
-Can access all records.
+Every role receives only the permissions necessary to perform its responsibilities.

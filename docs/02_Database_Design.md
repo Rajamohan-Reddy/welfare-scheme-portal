@@ -1,12 +1,24 @@
 # Database Design
 
-## Database
+## Overview
 
-MongoDB
+The Welfare Scheme / Service Management Portal uses MongoDB as its primary database.
+
+The database is designed to support:
+
+- Role-Based Access Control (RBAC)
+- Dynamic Welfare Schemes
+- Application Processing Workflow
+- Officer Verification Workflow
+- Dashboard Analytics
+- Notifications
+- Audit Logging
 
 ---
 
-# Collections Overview
+# Database Collections
+
+The system contains the following collections:
 
 1. users
 2. schemeCategories
@@ -20,13 +32,99 @@ MongoDB
 
 ---
 
+# Collection Relationships
+
+users
+
+↓
+
+applications
+
+↓
+
+applicationFormData
+
+↓
+
+applicationDocuments
+
+↓
+
+applicationTimeline
+
+---
+
+schemeCategories
+
+↓
+
+schemes
+
+↓
+
+applications
+
+---
+
+users
+
+↓
+
+notifications
+
+---
+
+users
+
+↓
+
+auditLogs
+
+---
+
 # Users Collection
 
-Purpose:
+## Purpose
 
-Stores all Citizens, Officers, and Admins.
+Stores all system users.
 
-Fields:
+The application supports three user roles:
+
+- ADMIN
+- OFFICER
+- CITIZEN
+
+---
+
+## User Creation Strategy
+
+### First Admin
+
+Created using a database seed process.
+
+Not created through public registration.
+
+---
+
+### Additional Admins
+
+Created only by existing Admin users.
+
+---
+
+### Officers
+
+Created only by Admin users.
+
+---
+
+### Citizens
+
+Can self-register using the public registration page.
+
+---
+
+## Fields
 
 - firstName
 - lastName
@@ -37,28 +135,50 @@ Fields:
 - role
 - profileImage
 - isActive
+- createdBy
 - lastLoginAt
+- createdAt
+- updatedAt
 
-Indexes:
+---
 
-- email (Unique)
-- aadhaarNumber (Unique)
+## Indexes
 
-Role Enum:
+email → Unique
 
-- CITIZEN
-- OFFICER
-- ADMIN
+aadhaarNumber → Unique
+
+role
+
+isActive
+
+---
+
+## Soft Delete Strategy
+
+Users are never physically deleted.
+
+Instead:
+
+isActive = false
+
+This preserves:
+
+- Application History
+- Audit Logs
+- Timeline Records
 
 ---
 
 # Scheme Categories Collection
 
-Purpose:
+## Purpose
 
-Groups schemes by category.
+Organizes welfare schemes by category.
 
-Examples:
+---
+
+## Examples
 
 - Education
 - Pension
@@ -66,22 +186,38 @@ Examples:
 - Health
 - Agriculture
 
-Fields:
+---
+
+## Fields
 
 - categoryCode
 - categoryName
 - description
 - isActive
+- createdAt
+- updatedAt
 
 ---
 
 # Schemes Collection
 
-Purpose:
+## Purpose
 
-Stores all welfare schemes.
+Stores all welfare schemes available in the portal.
 
-Fields:
+---
+
+## Examples
+
+- Amma Vodi
+- Old Age Pension
+- Widow Pension
+- Scholarship Scheme
+- Housing Scheme
+
+---
+
+## Fields
 
 - schemeCode
 - schemeName
@@ -94,24 +230,32 @@ Fields:
 - endDate
 - isActive
 - createdBy
+- createdAt
+- updatedAt
 
-Examples:
+---
 
-- Amma Vodi
-- Old Age Pension
-- Widow Pension
-- Scholarship Scheme
-- Housing Scheme
+## Indexes
+
+schemeCode → Unique
+
+schemeName
+
+categoryId
+
+isActive
 
 ---
 
 # Applications Collection
 
-Purpose:
+## Purpose
 
-Stores scheme applications submitted by citizens.
+Stores welfare scheme applications submitted by citizens.
 
-Fields:
+---
+
+## Fields
 
 - applicationNumber
 - applicantId
@@ -123,8 +267,24 @@ Fields:
 - verifiedAt
 - approvedAt
 - rejectedAt
+- applicationYear
+- applicationMonth
+- createdAt
+- updatedAt
 
-Application Status:
+---
+
+## Application Number Format
+
+APP-2026-000001
+
+APP-2026-000002
+
+APP-2026-000003
+
+---
+
+## Status Values
 
 - DRAFT
 - SUBMITTED
@@ -136,38 +296,68 @@ Application Status:
 
 ---
 
+## Indexes
+
+applicationNumber → Unique
+
+applicantId
+
+schemeId
+
+assignedOfficerId
+
+status
+
+applicationYear
+
+applicationMonth
+
+---
+
 # Application Form Data Collection
 
-Purpose:
+## Purpose
 
-Stores scheme-specific form fields dynamically.
+Stores dynamic form values for different schemes.
 
-Fields:
+This allows new schemes to be added without database structure changes.
+
+---
+
+## Fields
 
 - applicationId
 - formData
+- createdAt
+- updatedAt
 
-Example:
+---
+
+## Example
 
 {
-childName,
-schoolName,
-class
+"childName": "Rahul",
+"schoolName": "Government School",
+"class": "8"
 }
 
 ---
 
 # Application Documents Collection
 
-Purpose:
+## Purpose
 
 Stores uploaded document metadata.
 
-Files will be stored in:
+Files are stored in:
 
 backend/uploads/
 
-Fields:
+Database stores only metadata.
+
+---
+
+## Fields
 
 - applicationId
 - documentType
@@ -176,23 +366,30 @@ Fields:
 - uploadedBy
 - uploadedAt
 
-Examples:
+---
 
-- Aadhaar
+## Supported Documents
+
+- Aadhaar Card
 - Ration Card
 - Income Certificate
-- Photo
 - Bank Passbook
+- Passport Photo
+- Disability Certificate
 
 ---
 
 # Application Timeline Collection
 
-Purpose:
+## Purpose
 
-Tracks every application status change.
+Tracks complete application history.
 
-Fields:
+Every status change must create a timeline record.
+
+---
+
+## Fields
 
 - applicationId
 - oldStatus
@@ -201,7 +398,9 @@ Fields:
 - changedBy
 - changedAt
 
-Example:
+---
+
+## Example Workflow
 
 SUBMITTED
 
@@ -211,47 +410,169 @@ UNDER_VERIFICATION
 
 ↓
 
+CORRECTION_REQUIRED
+
+↓
+
+SUBMITTED
+
+↓
+
+UNDER_VERIFICATION
+
+↓
+
+VERIFIED
+
+↓
+
 APPROVED
 
 ---
 
 # Notifications Collection
 
-Purpose:
+## Purpose
 
 Stores system notifications.
 
-Fields:
+---
+
+## Fields
 
 - userId
 - title
 - message
 - isRead
+- createdAt
 
-Examples:
+---
 
-- Application Approved
-- Application Rejected
-- Correction Requested
+## Examples
+
+Application Submitted
+
+Application Approved
+
+Application Rejected
+
+Correction Requested
 
 ---
 
 # Audit Logs Collection
 
-Purpose:
+## Purpose
 
-Tracks system activities.
+Tracks important system actions.
 
-Fields:
+Provides traceability and accountability.
+
+---
+
+## Fields
 
 - userId
 - module
 - action
 - description
 - ipAddress
+- createdAt
 
-Examples:
+---
 
-- LOGIN
-- CREATE_SCHEME
-- APPROVE_APPLICATION
+## Examples
+
+LOGIN
+
+LOGOUT
+
+CREATE_ADMIN
+
+CREATE_OFFICER
+
+CREATE_SCHEME
+
+UPDATE_SCHEME
+
+SUBMIT_APPLICATION
+
+APPROVE_APPLICATION
+
+REJECT_APPLICATION
+
+DEACTIVATE_USER
+
+---
+
+# Dashboard Analytics Strategy
+
+Dashboard statistics are generated dynamically.
+
+Statistics are never stored separately.
+
+---
+
+## Dashboard Metrics
+
+Admin Dashboard
+
+- Total Users
+- Total Admins
+- Total Officers
+- Total Citizens
+- Active Users
+- Inactive Users
+- Total Schemes
+- Total Applications
+
+---
+
+Officer Dashboard
+
+- Assigned Applications
+- Pending Verification
+- Approved Applications
+- Rejected Applications
+
+---
+
+Citizen Dashboard
+
+- Total Applications
+- Approved Applications
+- Rejected Applications
+- Pending Applications
+
+---
+
+## Charts
+
+Pie Charts
+
+- Application Status Distribution
+
+Bar Charts
+
+- Scheme Wise Applications
+- Monthly Application Trends
+
+Data generated using MongoDB aggregation pipelines.
+
+---
+
+# Design Principles
+
+1. Dynamic Scheme Support
+
+2. Role-Based Access Control
+
+3. Soft Delete Strategy
+
+4. Complete Audit Trail
+
+5. Dashboard Analytics Support
+
+6. Scalable Collection Design
+
+7. Production-Oriented Architecture

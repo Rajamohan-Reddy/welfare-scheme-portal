@@ -1,22 +1,44 @@
 # User Roles and Permissions
 
-## Citizen
+## Overview
 
-The citizen is the primary user of the portal.
+The Welfare Scheme Portal uses Role-Based Access Control (RBAC).
 
-Permissions:
+The system contains three roles:
 
-✓ Register
+- ADMIN
+- OFFICER
+- CITIZEN
+
+Each role has specific responsibilities and permissions.
+
+---
+
+# Citizen
+
+Citizens are beneficiaries of welfare schemes.
+
+Citizens can self-register using the public registration page.
+
+Role assigned automatically:
+
+CITIZEN
+
+## Permissions
+
+✓ Register Account
 
 ✓ Login
 
-✓ View Available Schemes
+✓ View Schemes
 
 ✓ Search Schemes
 
-✓ Apply for Welfare Schemes
+✓ View Scheme Details
 
-✓ Upload Required Documents
+✓ Apply For Schemes
+
+✓ Upload Documents
 
 ✓ Edit Application Before Verification
 
@@ -26,21 +48,53 @@ Permissions:
 
 ✓ View Application History
 
+✓ View Notifications
+
+✓ Update Profile
+
 ---
 
-## Officer
+## Restrictions
 
-The officer is responsible for application processing and verification.
+Citizens cannot:
 
-Permissions:
+✗ Create Admin Accounts
+
+✗ Create Officer Accounts
+
+✗ Manage Users
+
+✗ Create Schemes
+
+✗ Verify Applications
+
+✗ Approve Applications
+
+✗ Reject Applications
+
+✗ Access Audit Logs
+
+---
+
+# Officer
+
+Officers are responsible for application verification and processing.
+
+Officers cannot self-register.
+
+Officer accounts are created only by Admin users.
+
+## Permissions
 
 ✓ Login
 
 ✓ View Assigned Applications
 
+✓ Review Application Details
+
 ✓ Verify Documents
 
-✓ Review Applicant Details
+✓ Verify Eligibility
 
 ✓ Request Corrections
 
@@ -50,19 +104,55 @@ Permissions:
 
 ✓ Add Verification Remarks
 
-✓ View Verification History
+✓ View Notifications
+
+✓ Update Profile
 
 ---
 
-## Admin
+## Restrictions
 
-The administrator manages the complete system.
+Officers cannot:
 
-Permissions:
+✗ Create Admin Accounts
+
+✗ Create Officer Accounts
+
+✗ Manage Users
+
+✗ Create Schemes
+
+✗ Delete Schemes
+
+✗ Access Audit Logs
+
+---
+
+# Admin
+
+Admins manage the complete system.
+
+The first Admin account is created through a seed process.
+
+Additional Admins can only be created by existing Admin users.
+
+Admins cannot self-register.
+
+## Permissions
 
 ✓ Login
 
-✓ Manage Welfare Schemes
+✓ Create Admin Accounts
+
+✓ Create Officer Accounts
+
+✓ View Users
+
+✓ Activate Users
+
+✓ Deactivate Users
+
+✓ Manage Schemes
 
 ✓ Create Schemes
 
@@ -70,67 +160,79 @@ Permissions:
 
 ✓ Disable Schemes
 
-✓ Manage Officers
-
 ✓ View Dashboard Analytics
 
 ✓ View Reports
 
 ✓ View Audit Logs
 
+✓ View Notifications
+
 ✓ Monitor Application Processing
 
-✓ Access System Statistics
+✓ Update Profile
+
+---
+
+# User Management Rules
+
+## Admin Creation
+
+First Admin:
+
+Created through seed process.
+
+Additional Admins:
+
+Created by existing Admin users.
+
+---
+
+## Officer Creation
+
+Created only by Admin users.
+
+---
+
+## Citizen Registration
+
+Self-registration allowed.
+
+Role assigned automatically:
+
+CITIZEN
+
+---
+
+# Account Status
+
+Users are never permanently deleted.
+
+Account Status:
+
+isActive = true
+
+or
+
+isActive = false
+
+Inactive users cannot login or access protected APIs.
 
 ---
 
 # Security Rules
 
-## Citizen
-
-Cannot:
-
-- Approve Applications
-- Reject Applications
-- Manage Schemes
-- Manage Officers
-
----
-
-## Officer
-
-Cannot:
-
-- Manage Officers
-- Manage System Settings
-
----
-
-## Admin
-
-Has Full System Access
-
-Except direct database access.
-
-Database operations must always go through application APIs.
-
----
-
-# Role-Based Access Control (RBAC)
-
-The system implements Role-Based Access Control (RBAC).
-
-Access is granted based on the authenticated user's role.
-
-Every protected API endpoint validates:
+Every protected API validates:
 
 1. JWT Token
-2. User Authentication
-3. User Authorization
+2. Authentication
+3. Authorization
 4. Role Permission
 
-Unauthorized users will receive:
+Unauthorized Requests:
 
-HTTP 401 - Unauthorized
+HTTP 401
 
-HTTP 403 - Forbidden
+Forbidden Actions:
+
+HTTP 403
