@@ -1,5 +1,89 @@
 import mongoose from "mongoose";
- 
+
+const mediaSchema = new mongoose.Schema(
+  {
+    bannerImage: {
+      type: String,
+      default: null,
+    },
+
+    thumbnailImage: {
+      type: String,
+      default: null,
+    },
+
+    galleryImages: {
+      type: [String],
+      default: [],
+    },
+
+    guidelinesDocument: {
+      type: String,
+      default: null,
+    },
+
+    governmentOrderDocument: {
+      type: String,
+      default: null,
+    },
+  },
+  {
+    _id: false,
+  },
+);
+
+const eligibilitySchema = new mongoose.Schema(
+  {
+    minAge: {
+      type: Number,
+      default: null,
+    },
+
+    maxAge: {
+      type: Number,
+      default: null,
+    },
+
+    gender: {
+      type: [String],
+      default: [],
+    },
+
+    maxAnnualIncome: {
+      type: Number,
+      default: null,
+    },
+
+    casteCategories: {
+      type: [String],
+      default: [],
+    },
+
+    studentRequired: {
+      type: Boolean,
+      default: false,
+    },
+
+    farmerRequired: {
+      type: Boolean,
+      default: false,
+    },
+
+    widowRequired: {
+      type: Boolean,
+      default: false,
+    },
+
+    disabledRequired: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  {
+    _id: false,
+  },
+);
+
 const schemeSchema = new mongoose.Schema(
   {
     schemeCode: {
@@ -9,63 +93,102 @@ const schemeSchema = new mongoose.Schema(
       uppercase: true,
       trim: true,
     },
- 
+
     schemeName: {
       type: String,
       required: true,
       trim: true,
     },
- 
-    categoryId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "SchemeCategory",
-      required: true,
-    },
- 
+
     description: {
       type: String,
       required: true,
+      trim: true,
     },
- 
-    eligibilityCriteria: {
+
+    department: {
       type: String,
       required: true,
+      trim: true,
     },
- 
+
+    benefitType: {
+      type: String,
+      enum: [
+        "DIRECT_BENEFIT_TRANSFER",
+        "SUBSIDY",
+        "SCHOLARSHIP",
+        "PENSION",
+        "REIMBURSEMENT",
+      ],
+      required: true,
+    },
+
+    benefitAmount: {
+      type: Number,
+      default: 0,
+    },
+
+    media: {
+      type: mediaSchema,
+      default: {},
+    },
+
+    eligibility: {
+      type: eligibilitySchema,
+      default: {},
+    },
+
     requiredDocuments: {
       type: [String],
       default: [],
     },
- 
+
     applicationFields: {
       type: [String],
       default: [],
     },
- 
+
     startDate: {
       type: Date,
       required: true,
     },
- 
+
     endDate: {
       type: Date,
       required: true,
     },
- 
+
     isActive: {
       type: Boolean,
       default: true,
     },
- 
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
+
+    updatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
   },
   {
     timestamps: true,
-  }
+  },
 );
- 
+
+schemeSchema.index({ schemeCode: 1 }, { unique: true });
+
+schemeSchema.index({
+  department: 1,
+});
+
+schemeSchema.index({
+  isActive: 1,
+});
+
 export const Scheme = mongoose.model("Scheme", schemeSchema);
