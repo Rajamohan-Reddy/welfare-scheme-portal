@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+import { BENEFIT_TYPES } from "../constants/scheme.constants.js";
+
 const mediaSchema = new mongoose.Schema(
   {
     bannerImage: {
@@ -100,6 +102,12 @@ const schemeSchema = new mongoose.Schema(
       trim: true,
     },
 
+    categoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "SchemeCategory",
+      required: true,
+    },
+
     description: {
       type: String,
       required: true,
@@ -114,13 +122,9 @@ const schemeSchema = new mongoose.Schema(
 
     benefitType: {
       type: String,
-      enum: [
-        "DIRECT_BENEFIT_TRANSFER",
-        "SUBSIDY",
-        "SCHOLARSHIP",
-        "PENSION",
-        "REIMBURSEMENT",
-      ],
+
+      enum: Object.values(BENEFIT_TYPES),
+
       required: true,
     },
 
