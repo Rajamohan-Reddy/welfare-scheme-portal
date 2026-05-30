@@ -1,7 +1,11 @@
-export const createError = (message, statusCode = 500) => {
-  const error = new Error(message);
+export class AppError extends Error {
+  constructor(message, statusCode = 500, errors = []) {
+    super(message);
 
-  error.statusCode = statusCode;
+    this.statusCode = statusCode;
 
-  return error;
-};
+    this.errors = errors;
+
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
