@@ -23,6 +23,7 @@ const paymentSchema = new mongoose.Schema(
     amount: {
       type: Number,
       required: true,
+      min: 0,
     },
 
     transactionReference: {
@@ -47,10 +48,35 @@ const paymentSchema = new mongoose.Schema(
       ref: "User",
       default: null,
     },
+
+    remarks: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,
   },
 );
+
+paymentSchema.index({
+  applicationId: 1,
+});
+
+paymentSchema.index({
+  beneficiaryId: 1,
+});
+
+paymentSchema.index({
+  schemeId: 1,
+});
+
+paymentSchema.index({
+  paymentStatus: 1,
+});
+
+paymentSchema.index({
+  paymentDate: -1,
+});
 
 export const Payment = mongoose.model("Payment", paymentSchema);

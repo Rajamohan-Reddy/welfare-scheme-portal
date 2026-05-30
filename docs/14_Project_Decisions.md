@@ -1,211 +1,131 @@
 # Project Decisions
 
-## Purpose
+## Authentication
 
-This document records important architectural and technical decisions made during project planning and development.
+Decision:
 
-It serves as the single source of truth for future development.
-
----
-
-# Repository Strategy
-
-Repository Type:
-
-Single Repository
-
-Branches:
-
-- main
-- dev
-
-Main Branch:
-
-Production-ready code only.
-
-Dev Branch:
-
-All development work.
-
----
-
-# Technology Decisions
-
-Frontend:
-
-React.js
-
-Backend:
-
-Node.js + Express.js
-
-Database:
-
-MongoDB
-
-Authentication:
-
-JWT
-
-Password Hashing:
-
-bcrypt
-
----
-
-# Backend Architecture
-
-Architecture Pattern:
-
-Route
-
-↓
-
-Controller
-
-↓
-
-Service
-
-↓
-
-Model
-
-↓
-
-MongoDB
-
----
-
-# Module System
-
-JavaScript Modules:
-
-ES Modules
-
-package.json
-
-"type": "module"
-
----
-
-# Development Server
-
-Command:
-
-npm run dev
-
-Runtime:
-
-node --watch
-
-Entry File:
-
-src/index.js
-
----
-
-# File Upload Strategy
-
-Uploaded files stored in:
-
-backend/uploads/
-
-Database stores:
-
-filePath
-
-No cloud storage used.
+JWT + Refresh Token
 
 Reason:
 
-Capstone project scope.
+Scalable and frontend friendly.
 
 ---
 
-# User Roles
+## Authorization
 
-ADMIN
+Decision:
 
-OFFICER
+Role Based Access Control
 
-CITIZEN
+Roles:
 
----
-
-# User Creation Strategy
-
-First Admin:
-
-Created using seed process.
-
-Additional Admins:
-
-Created by existing Admins.
-
-Officers:
-
-Created by Admins.
-
-Citizens:
-
-Self Registration.
+- ADMIN
+- OFFICER
+- CITIZEN
 
 ---
 
-# User Deletion Strategy
+## Database
 
-Physical deletion is not allowed.
+Decision:
 
-Users will be deactivated.
-
-Field:
-
-isActive
+MongoDB
 
 Reason:
 
-Preserve application history and audit logs.
+Flexible schema support for dynamic scheme forms.
 
 ---
 
-# Dashboard Strategy
+## Architecture
 
-Dashboard data is generated dynamically from database records.
+Decision:
 
-No dashboard counts are stored separately.
+Controller-Service-Model Pattern
 
-Charts:
+Reason:
 
-- Pie Charts
-- Bar Charts
-
-Statistics generated using MongoDB aggregation.
+Maintainability and scalability.
 
 ---
 
-# API Versioning
+## Notifications
 
-Base URL:
+Decision:
 
-/api/v1
+Database Driven Notifications
 
-Future versions:
+Reason:
 
-/api/v2
+Future support for Email and SMS integration.
 
 ---
 
-# Documentation Rule
+## Audit Trail
 
-Whenever architecture changes:
+Decision:
 
-1. Update Documentation
+Centralized Audit Logging
 
-2. Update README
+Reason:
 
-3. Commit Documentation Changes
+Government applications require traceability.
 
-4. Then Implement Code
+---
 
-Documentation must always reflect the latest implementation.
+## Upload Strategy
+
+Decision:
+
+Multer Local Storage
+
+Reason:
+
+Simple implementation.
+
+Future:
+
+AWS S3
+
+Azure Blob Storage
+
+---
+
+## API Documentation
+
+Decision:
+
+Swagger OpenAPI 3.0
+
+Reason:
+
+Frontend and QA teams can test APIs independently.
+
+---
+
+## Application Workflow
+
+Decision:
+
+Multi-Level Verification
+
+Flow:
+
+Citizen
+
+↓
+
+Officer Verification
+
+↓
+
+Admin Approval
+
+↓
+
+Payment Release
+
+Reason:
+
+Matches government welfare distribution processes.

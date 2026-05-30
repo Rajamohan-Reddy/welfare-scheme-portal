@@ -61,7 +61,13 @@ export const getMyApplications = async (req, res) => {
 
 export const getById = async (req, res) => {
   try {
-    const application = await getApplicationById(req.params.id);
+    const application = await getApplicationById({
+      applicationId: req.params.id,
+
+      userId: req.user.userId,
+
+      role: req.user.role,
+    });
 
     return successResponse({
       res,

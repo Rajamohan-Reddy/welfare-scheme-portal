@@ -23,6 +23,7 @@ import "./docs/dashboard.docs.js";
 import "./docs/upload.docs.js";
 import "./docs/report.docs.js";
 
+import { env } from "./config/env.config.js";
 import { swaggerSpec } from "./config/swagger.config.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 import healthRoutes from "./routes/health.routes.js";
@@ -39,11 +40,13 @@ import reportRoutes from "./routes/report.routes.js";
 
 const app = express();
 
+const app = express();
+
+app.disable("x-powered-by");
+
 app.use(securityMiddleware);
 
 app.use(requestLogger);
-
-import { env } from "./config/env.config.js";
 
 app.use(
   cors({
@@ -54,7 +57,11 @@ app.use(
 
 app.use("/uploads", express.static("uploads"));
 
-app.use(express.json());
+app.use(
+  express.json({
+    limit: "10mb",
+  }),
+);
 
 app.use(cookieParser());
 

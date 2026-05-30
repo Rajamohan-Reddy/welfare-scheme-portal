@@ -78,13 +78,20 @@ export const getCitizenApplications = async (citizenId) => {
     });
 };
 
-export const getApplicationById = async (applicationId) => {
+export const getApplicationById = async ({ applicationId, userId, role }) => {
   const application = await Application.findById(applicationId)
     .populate("citizenId", "firstName lastName email")
     .populate("schemeId");
 
   if (!application) {
     throw new Error("Application not found");
+  }
+
+  if (
+    role === "CITIZEN" &&
+    application.citizenId._id.toString() !== userId.toString()
+  ) {
+    throw new Error("Access denied");
   }
 
   return application;

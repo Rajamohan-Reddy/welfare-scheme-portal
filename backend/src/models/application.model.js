@@ -131,4 +131,7 @@ applicationSchema.index({
   status: 1,
 });
 
+applicationSchema.index({
+  submittedAt: -1,
+});
 export const Application = mongoose.model("Application", applicationSchema);

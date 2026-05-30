@@ -15,9 +15,7 @@ export const env = {
 
   refreshTokenExpiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN || "7d",
 
-  adminEmail:
-    process.env.ADMIN_EMAIL ||
-    "[admin@welfareportal.com](mailto:admin@welfareportal.com)",
+  adminEmail: process.env.ADMIN_EMAIL || "admin@welfareportal.com",
 
   adminPassword: process.env.ADMIN_PASSWORD || "Admin@123",
 
