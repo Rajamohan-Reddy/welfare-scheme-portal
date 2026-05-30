@@ -14,6 +14,7 @@ import paymentRoutes from "./routes/payment.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import reportRoutes from "./routes/report.routes.js";
 
 const app = express();
 
@@ -53,5 +54,7 @@ app.use("/api/v1/uploads", uploadRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
 
 app.use("/api/v1/dashboard", dashboardRoutes);
+
+app.use("/api/v1/reports", reportRoutes);
 
 export default app;
