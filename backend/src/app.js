@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import schemeRoutes from "./routes/scheme.routes.js";
+import schemeCategoryRoutes from "./routes/scheme-category.routes.js";
 
 const app = express();
 
@@ -30,5 +31,7 @@ app.use("/api/v1/health", healthRoutes);
 app.use("/api/v1/auth", authRoutes);
 
 app.use("/api/v1/schemes", schemeRoutes);
+
+app.use("/api/v1/scheme-categories", schemeCategoryRoutes);
 
 export default app;

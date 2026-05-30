@@ -63,3 +63,26 @@ export const validateUpdateScheme = (data) => {
     errors,
   };
 };
+export const validateCreateCategory = (data) => {
+  const errors = [];
+
+  if (!data.categoryCode?.trim()) {
+    errors.push("Category code is required");
+  }
+
+  if (!data.categoryName?.trim()) {
+    errors.push("Category name is required");
+  }
+
+  return {
+    isValid: errors.length === 0,
+    errors,
+  };
+};
+
+export const validateUpdateCategory = (data) => {
+  return {
+    isValid: true,
+    errors: [],
+  };
+};
