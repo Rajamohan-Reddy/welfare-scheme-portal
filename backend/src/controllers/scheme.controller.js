@@ -113,7 +113,7 @@ export const update = async (req, res) => {
 
 export const remove = async (req, res) => {
   try {
-    await deleteScheme(req.params.id);
+    await deleteScheme(req.params.id, req.user.userId);
 
     return successResponse({
       res,

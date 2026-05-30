@@ -4,6 +4,12 @@ import { Application } from "../models/application.model.js";
 
 import { APPLICATION_STATUS } from "../constants/application.constants.js";
 
+import { createNotification } from "./notification.service.js";
+
+import { createAuditLog } from "./audit-log.service.js";
+
+import { AUDIT_MODULES, AUDIT_ACTIONS } from "../constants/audit.constants.js";
+
 export const releasePayment = async ({ applicationId, processedBy }) => {
   const application = await Application.findById(applicationId)
     .populate("schemeId")
@@ -46,6 +52,30 @@ export const releasePayment = async ({ applicationId, processedBy }) => {
   application.status = APPLICATION_STATUS.PAID;
 
   await application.save();
+
+  await createAuditLog({
+    module: AUDIT_MODULES.PAYMENT,
+
+    action: AUDIT_ACTIONS.PAYMENT_RELEASE,
+
+    entityId: payment._id,
+
+    performedBy: processedBy,
+
+    description: `Payment released for application ${application.applicationNumber}`,
+  });
+
+  await createNotification({
+    userId: application.citizenId._id,
+
+    title: "Payment Released",
+
+    message: `₹${payment.amount} has been released successfully.`,
+
+    referenceType: "PAYMENT",
+
+    referenceId: payment._id,
+  });
 
   return payment;
 };

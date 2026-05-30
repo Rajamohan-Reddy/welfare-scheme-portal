@@ -55,4 +55,8 @@ auditLogSchema.index({
   performedBy: 1,
 });
 
+auditLogSchema.index({
+  createdAt: -1,
+});
+
 export const AuditLog = mongoose.model("AuditLog", auditLogSchema);

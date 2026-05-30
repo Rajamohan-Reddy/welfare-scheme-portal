@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+
 import { User } from "../models/user.model.js";
 
 import { ROLES } from "../constants/roles.constants.js";
@@ -8,6 +9,10 @@ import {
   generateRefreshToken,
   verifyRefreshToken,
 } from "../utils/jwt-helper.js";
+
+import { createAuditLog } from "./audit-log.service.js";
+
+import { AUDIT_MODULES, AUDIT_ACTIONS } from "../constants/audit.constants.js";
 
 export const registerCitizen = async ({
   firstName,
@@ -109,6 +114,18 @@ export const loginUser = async ({ identifier, password }) => {
 
   await user.save();
 
+  await createAuditLog({
+    module: AUDIT_MODULES.AUTH,
+
+    action: AUDIT_ACTIONS.LOGIN,
+
+    entityId: user._id,
+
+    performedBy: user._id,
+
+    description: `${user.email} logged in`,
+  });
+
   const userResponse = {
     _id: user._id,
 
@@ -141,9 +158,29 @@ export const loginUser = async ({ identifier, password }) => {
 };
 
 export const logoutUser = async (userId) => {
-  await User.findByIdAndUpdate(userId, {
-    refreshToken: null,
-  });
+  const user = await User.findByIdAndUpdate(
+    userId,
+    {
+      refreshToken: null,
+    },
+    {
+      new: true,
+    },
+  );
+
+  if (user) {
+    await createAuditLog({
+      module: AUDIT_MODULES.AUTH,
+
+      action: AUDIT_ACTIONS.LOGOUT,
+
+      entityId: user._id,
+
+      performedBy: user._id,
+
+      description: `${user.email} logged out`,
+    });
+  }
 
   return true;
 };

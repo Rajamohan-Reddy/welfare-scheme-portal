@@ -2,6 +2,12 @@ import { Application } from "../models/application.model.js";
 
 import { Scheme } from "../models/scheme.model.js";
 
+import { createNotification } from "./notification.service.js";
+
+import { createAuditLog } from "./audit-log.service.js";
+
+import { AUDIT_MODULES, AUDIT_ACTIONS } from "../constants/audit.constants.js";
+
 export const generateApplicationNumber = () => {
   const timestamp = Date.now();
 
@@ -33,6 +39,30 @@ export const createApplication = async ({
     dynamicFormData,
 
     applicantRemarks,
+  });
+
+  await createAuditLog({
+    module: AUDIT_MODULES.APPLICATION,
+
+    action: AUDIT_ACTIONS.CREATE,
+
+    entityId: application._id,
+
+    performedBy: citizenId,
+
+    description: `Application ${application.applicationNumber} submitted`,
+  });
+
+  await createNotification({
+    userId: citizenId,
+
+    title: "Application Submitted",
+
+    message: `Your application ${application.applicationNumber} has been submitted successfully.`,
+
+    referenceType: "APPLICATION",
+
+    referenceId: application._id,
   });
 
   return application;

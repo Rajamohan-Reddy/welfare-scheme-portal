@@ -1,9 +1,16 @@
 import express from "express";
 import cors from "cors";
-import helmet from "helmet";
-import morgan from "morgan";
+
 import cookieParser from "cookie-parser";
 import swaggerUi from "swagger-ui-express";
+
+import { securityMiddleware } from "./config/security.config.js";
+
+import { requestLogger } from "./middleware/request-logger.middleware.js";
+
+import { apiRateLimiter } from "./middleware/rate-limit.middleware.js";
+
+import { authRateLimiter } from "./middleware/rate-limit.middleware.js";
 
 import "./docs/auth.docs.js";
 import "./docs/scheme-category.docs.js";
@@ -32,11 +39,15 @@ import reportRoutes from "./routes/report.routes.js";
 
 const app = express();
 
-app.use(helmet());
+app.use(securityMiddleware);
+
+app.use(requestLogger);
+
+import { env } from "./config/env.config.js";
 
 app.use(
   cors({
-    origin: true,
+    origin: env.clientUrl,
     credentials: true,
   }),
 );
@@ -47,11 +58,17 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-app.use(morgan("dev"));
+app.use("/api", apiRateLimiter);
 
 app.use("/api/v1/health", healthRoutes);
 
-app.use("/api/v1/auth", authRoutes);
+app.use(
+  "/api/v1/auth",
+
+  authRateLimiter,
+
+  authRoutes,
+);
 
 app.use("/api/v1/schemes", schemeRoutes);
 
