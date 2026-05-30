@@ -9,6 +9,7 @@ import authRoutes from "./routes/auth.routes.js";
 import schemeRoutes from "./routes/scheme.routes.js";
 import schemeCategoryRoutes from "./routes/scheme-category.routes.js";
 import applicationRoutes from "./routes/application.routes.js";
+import verificationRoutes from "./routes/verification.routes.js";
 
 const app = express();
 
@@ -36,5 +37,7 @@ app.use("/api/v1/schemes", schemeRoutes);
 app.use("/api/v1/scheme-categories", schemeCategoryRoutes);
 
 app.use("/api/v1/applications", applicationRoutes);
+
+app.use("/api/v1/verifications", verificationRoutes);
 
 export default app;
