@@ -40,8 +40,6 @@ import reportRoutes from "./routes/report.routes.js";
 
 const app = express();
 
-const app = express();
-
 app.disable("x-powered-by");
 
 app.use(securityMiddleware);
