@@ -79,3 +79,81 @@ export const fieldVerifyApplication = async ({
 
   return application;
 };
+
+export const approveApplication = async ({
+  applicationId,
+  adminId,
+  remarks,
+}) => {
+  const application = await Application.findById(applicationId);
+
+  if (!application) {
+    throw new Error("Application not found");
+  }
+
+  const previousStatus = application.status;
+
+  application.status = APPLICATION_STATUS.APPROVED;
+
+  application.approvedAt = new Date();
+
+  application.approvedBy = adminId;
+
+  application.officerRemarks = remarks;
+
+  await application.save();
+
+  await VerificationHistory.create({
+    applicationId,
+
+    action: VERIFICATION_ACTIONS.APPROVE,
+
+    remarks,
+
+    previousStatus,
+
+    currentStatus: APPLICATION_STATUS.APPROVED,
+
+    performedBy: adminId,
+  });
+
+  return application;
+};
+
+export const rejectApplication = async ({
+  applicationId,
+  adminId,
+  remarks,
+}) => {
+  const application = await Application.findById(applicationId);
+
+  if (!application) {
+    throw new Error("Application not found");
+  }
+
+  const previousStatus = application.status;
+
+  application.status = APPLICATION_STATUS.REJECTED;
+
+  application.rejectedAt = new Date();
+
+  application.rejectionReason = remarks;
+
+  await application.save();
+
+  await VerificationHistory.create({
+    applicationId,
+
+    action: VERIFICATION_ACTIONS.REJECT,
+
+    remarks,
+
+    previousStatus,
+
+    currentStatus: APPLICATION_STATUS.REJECTED,
+
+    performedBy: adminId,
+  });
+
+  return application;
+};
