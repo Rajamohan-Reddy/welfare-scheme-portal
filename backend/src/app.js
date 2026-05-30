@@ -3,7 +3,20 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
 
+import "./docs/auth.docs.js";
+import "./docs/scheme-category.docs.js";
+import "./docs/scheme.docs.js";
+import "./docs/application.docs.js";
+import "./docs/verification.docs.js";
+import "./docs/payment.docs.js";
+import "./docs/notification.docs.js";
+import "./docs/dashboard.docs.js";
+import "./docs/upload.docs.js";
+import "./docs/report.docs.js";
+
+import { swaggerSpec } from "./config/swagger.config.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
@@ -57,6 +70,14 @@ app.use("/api/v1/notifications", notificationRoutes);
 app.use("/api/v1/dashboard", dashboardRoutes);
 
 app.use("/api/v1/reports", reportRoutes);
+
+app.use(
+  "/api-docs",
+
+  swaggerUi.serve,
+
+  swaggerUi.setup(swaggerSpec),
+);
 
 app.use(errorHandler);
 
