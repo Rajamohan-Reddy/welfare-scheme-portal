@@ -1,0 +1,33 @@
+export const AUDIT_MODULES = Object.freeze({
+  AUTH: "AUTH",
+
+  USER: "USER",
+
+  SCHEME: "SCHEME",
+
+  APPLICATION: "APPLICATION",
+
+  VERIFICATION: "VERIFICATION",
+
+  PAYMENT: "PAYMENT",
+});
+
+export const AUDIT_ACTIONS = Object.freeze({
+  CREATE: "CREATE",
+
+  UPDATE: "UPDATE",
+
+  DELETE: "DELETE",
+
+  LOGIN: "LOGIN",
+
+  LOGOUT: "LOGOUT",
+
+  APPROVE: "APPROVE",
+
+  REJECT: "REJECT",
+
+  VERIFY: "VERIFY",
+
+  PAYMENT_RELEASE: "PAYMENT_RELEASE",
+});
