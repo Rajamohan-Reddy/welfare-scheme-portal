@@ -11,6 +11,7 @@ import schemeCategoryRoutes from "./routes/scheme-category.routes.js";
 import applicationRoutes from "./routes/application.routes.js";
 import verificationRoutes from "./routes/verification.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
+import uploadRoutes from "./routes/upload.routes.js";
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use(
     credentials: true,
   }),
 );
+
+app.use("/uploads", express.static("uploads"));
 
 app.use(express.json());
 
@@ -42,5 +45,7 @@ app.use("/api/v1/applications", applicationRoutes);
 app.use("/api/v1/verifications", verificationRoutes);
 
 app.use("/api/v1/payments", paymentRoutes);
+
+app.use("/api/v1/uploads", uploadRoutes);
 
 export default app;
