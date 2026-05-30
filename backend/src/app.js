@@ -11,7 +11,8 @@ import schemeCategoryRoutes from "./routes/scheme-category.routes.js";
 import applicationRoutes from "./routes/application.routes.js";
 import verificationRoutes from "./routes/verification.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
-import uploadRoutes from "./routes/upload.routes.js";
+import uploadRoutes from "./routes/upload.routes.js";\
+import notificationRoutes from "./routes/notification.routes.js";
 
 const app = express();
 
@@ -47,5 +48,10 @@ app.use("/api/v1/verifications", verificationRoutes);
 app.use("/api/v1/payments", paymentRoutes);
 
 app.use("/api/v1/uploads", uploadRoutes);
+
+app.use(
+  "/api/v1/notifications",
+  notificationRoutes
+);
 
 export default app;
