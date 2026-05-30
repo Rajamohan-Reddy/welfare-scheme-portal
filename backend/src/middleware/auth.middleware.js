@@ -47,10 +47,16 @@ export const authenticate = async (req, res, next) => {
 
     next();
   } catch (error) {
+    console.log("=================================");
+    console.log("AUTH ERROR");
+    console.log(error.name);
+    console.log(error.message);
+    console.log("=================================");
+
     return errorResponse({
       res,
       statusCode: HTTP_STATUS.UNAUTHORIZED,
-      message: "Invalid or expired token",
+      message: error.message,
     });
   }
 };
