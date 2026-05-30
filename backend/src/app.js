@@ -8,6 +8,7 @@ import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import schemeRoutes from "./routes/scheme.routes.js";
 import schemeCategoryRoutes from "./routes/scheme-category.routes.js";
+import applicationRoutes from "./routes/application.routes.js";
 
 const app = express();
 
@@ -33,5 +34,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/schemes", schemeRoutes);
 
 app.use("/api/v1/scheme-categories", schemeCategoryRoutes);
+
+app.use("/api/v1/applications", applicationRoutes);
 
 export default app;
