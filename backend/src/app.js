@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 
 import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import schemeRoutes from "./routes/scheme.routes.js";
 
 const app = express();
 
@@ -27,5 +28,7 @@ app.use(morgan("dev"));
 app.use("/api/v1/health", healthRoutes);
 
 app.use("/api/v1/auth", authRoutes);
+
+app.use("/api/v1/schemes", schemeRoutes);
 
 export default app;
