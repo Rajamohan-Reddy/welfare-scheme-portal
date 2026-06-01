@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "node --watch src/index.js",
     "seed-admin": "node src/seeds/admin.seed.js",
+    "seed:categories": "node src/seeds/scheme-categories.seed.js",
+    "seed:schemes": "node src/seeds/schemes.seed.js",
+    "seed:officers": "node src/seeds/officers.seed.js",
+    "seed:welfare": "node src/seeds/welfare-master-data.seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

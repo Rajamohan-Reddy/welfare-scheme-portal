@@ -4,6 +4,8 @@ import { User } from "../models/user.model.js";
 
 import { ROLES } from "../constants/roles.constants.js";
 
+import { AUTH_MESSAGES } from "../constants/auth-messages.constants.js";
+
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -238,6 +240,121 @@ export const getCurrentUser = async (userId) => {
 
     updatedAt: user.updatedAt,
   };
+};
+
+export const createAdminAccount = async (payload, createdBy) => {
+  return await createStaffAccount(payload, ROLES.ADMIN, createdBy);
+};
+
+export const createOfficerAccount = async (payload, createdBy) => {
+  return await createStaffAccount(payload, ROLES.OFFICER, createdBy);
+};
+
+const createStaffAccount = async (
+  { firstName, lastName, email, phoneNumber, password },
+  role,
+  createdBy,
+) => {
+  const existingEmail = await User.findOne({
+    email: email.toLowerCase(),
+  });
+
+  if (existingEmail) {
+    throw new Error(AUTH_MESSAGES.USER_ALREADY_EXISTS);
+  }
+
+  const existingPhone = await User.findOne({
+    phoneNumber,
+  });
+
+  if (existingPhone) {
+    throw new Error(AUTH_MESSAGES.PHONE_ALREADY_EXISTS);
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const user = await User.create({
+    firstName,
+    lastName,
+    email: email.toLowerCase(),
+    phoneNumber,
+    password: hashedPassword,
+    role,
+    createdBy,
+  });
+
+  await createAuditLog({
+    module: AUDIT_MODULES.USER,
+    action: AUDIT_ACTIONS.CREATE,
+    entityId: user._id,
+    performedBy: createdBy,
+    description: `${role} account created`,
+  });
+
+  return {
+    _id: user._id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email,
+    phoneNumber: user.phoneNumber,
+    role: user.role,
+    isActive: user.isActive,
+    isProfileCompleted: user.isProfileCompleted,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt,
+  };
+};
+
+export const getAdminsList = async () => {
+  return await User.find({
+    role: ROLES.ADMIN,
+  })
+    .select("-password -refreshToken")
+    .sort({
+      createdAt: -1,
+    });
+};
+
+export const getOfficersList = async () => {
+  return await User.find({
+    role: ROLES.OFFICER,
+  })
+    .select("-password -refreshToken")
+    .sort({
+      createdAt: -1,
+    });
+};
+
+export const updateAccountStatus = async (userId, isActive, performedBy) => {
+  const user = await User.findByIdAndUpdate(
+    userId,
+    {
+      isActive,
+
+      deactivatedAt: isActive ? null : new Date(),
+    },
+    {
+      new: true,
+    },
+  );
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  await createAuditLog({
+    module: AUDIT_MODULES.USER,
+
+    action: AUDIT_ACTIONS.UPDATE,
+
+    entityId: user._id,
+
+    performedBy,
+
+    description: `Account ${isActive ? "activated" : "deactivated"}`,
+  });
+
+  return user;
 };
 
 //we can return this way also

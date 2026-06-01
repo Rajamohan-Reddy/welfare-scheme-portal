@@ -16,4 +16,10 @@ export const AUTH_MESSAGES = Object.freeze({
   UNAUTHORIZED: "Unauthorized access",
 
   TOKEN_INVALID: "Invalid or expired token",
+
+  ADMIN_CREATED: "Admin created successfully",
+
+  OFFICER_CREATED: "Officer created successfully",
+
+  STATUS_UPDATED: "User status updated successfully",
 });

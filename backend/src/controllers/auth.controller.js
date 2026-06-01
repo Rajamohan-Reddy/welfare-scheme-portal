@@ -4,11 +4,17 @@ import {
   logoutUser,
   refreshAccessToken,
   getCurrentUser,
+  createAdminAccount,
+  createOfficerAccount,
+  getAdminsList,
+  getOfficersList,
+  updateAccountStatus,
 } from "../services/auth.service.js";
 
 import {
   validateRegister,
   validateLogin,
+  validateCreateStaff,
 } from "../validators/auth.validator.js";
 
 import { successResponse, errorResponse } from "../utils/api-response.js";
@@ -140,6 +146,119 @@ export const me = async (req, res) => {
 
     return successResponse({
       res,
+      data: user,
+    });
+  } catch (error) {
+    return errorResponse({
+      res,
+      message: error.message,
+    });
+  }
+};
+
+export const createAdmin = async (req, res) => {
+  try {
+    const validation = validateCreateStaff(req.body);
+
+    if (!validation.isValid) {
+      return errorResponse({
+        res,
+        statusCode: HTTP_STATUS.BAD_REQUEST,
+        message: "Validation failed",
+        errors: validation.errors,
+      });
+    }
+
+    const admin = await createAdminAccount(req.body, req.user.userId);
+
+    return successResponse({
+      res,
+      statusCode: HTTP_STATUS.CREATED,
+      message: AUTH_MESSAGES.ADMIN_CREATED,
+      data: admin,
+    });
+  } catch (error) {
+    return errorResponse({
+      res,
+      statusCode: HTTP_STATUS.CONFLICT,
+      message: error.message,
+    });
+  }
+};
+
+export const createOfficer = async (req, res) => {
+  try {
+    const validation = validateCreateStaff(req.body);
+
+    if (!validation.isValid) {
+      return errorResponse({
+        res,
+        statusCode: HTTP_STATUS.BAD_REQUEST,
+        message: "Validation failed",
+        errors: validation.errors,
+      });
+    }
+
+    const officer = await createOfficerAccount(req.body, req.user.userId);
+
+    return successResponse({
+      res,
+      statusCode: HTTP_STATUS.CREATED,
+      message: AUTH_MESSAGES.OFFICER_CREATED,
+      data: officer,
+    });
+  } catch (error) {
+    return errorResponse({
+      res,
+      statusCode: HTTP_STATUS.CONFLICT,
+      message: error.message,
+    });
+  }
+};
+
+export const getAdmins = async (req, res) => {
+  try {
+    const admins = await getAdminsList();
+
+    return successResponse({
+      res,
+      data: admins,
+    });
+  } catch (error) {
+    return errorResponse({
+      res,
+      message: error.message,
+    });
+  }
+};
+
+export const getOfficers = async (req, res) => {
+  try {
+    const officers = await getOfficersList();
+
+    return successResponse({
+      res,
+      data: officers,
+    });
+  } catch (error) {
+    return errorResponse({
+      res,
+      message: error.message,
+    });
+  }
+};
+
+export const updateUserStatus = async (req, res) => {
+  try {
+    const user = await updateAccountStatus(
+      req.params.id,
+      req.body.isActive,
+      req.user.userId,
+    );
+
+    return successResponse({
+      res,
+      message: "Status updated successfully",
       data: user,
     });
   } catch (error) {

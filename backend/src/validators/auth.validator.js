@@ -61,3 +61,19 @@ export const validateLogin = ({ identifier, password }) => {
     errors,
   };
 };
+
+export const validateCreateStaff = ({
+  firstName,
+  lastName,
+  email,
+  phoneNumber,
+  password,
+}) => {
+  return validateRegister({
+    firstName,
+    lastName,
+    email,
+    phoneNumber,
+    password,
+  });
+};

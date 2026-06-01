@@ -1,11 +1,15 @@
+import fs from "fs";
 import multer from "multer";
 import path from "path";
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadType = req.body.uploadType || "misc";
+    console.log("BODY:", req.body);
+    console.log("UPLOAD TYPE:", req.body.uploadType);
 
-    let uploadPath = "uploads/misc";
+    const uploadType = req.body.uploadType || "application-document";
+
+    let uploadPath = "uploads/applications";
 
     switch (uploadType) {
       case "profile":
@@ -32,6 +36,12 @@ const storage = multer.diskStorage({
         uploadPath = "uploads/applications";
         break;
     }
+
+    fs.mkdirSync(uploadPath, {
+      recursive: true,
+    });
+
+    console.log("UPLOAD PATH:", uploadPath);
 
     cb(null, uploadPath);
   },
