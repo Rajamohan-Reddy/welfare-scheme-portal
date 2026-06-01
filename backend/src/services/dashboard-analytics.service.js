@@ -5,12 +5,41 @@ import { Payment } from "../models/payment.model.js";
 
 export const getDashboardAnalytics = async () => {
   const [
+    totalApplications,
+    totalUsers,
+    totalSchemes,
+    totalPayments,
+
+    approvedApplications,
+    rejectedApplications,
+    paidApplications,
+
     applicationsByStatus,
     applicationsByMonth,
     usersByRole,
     paymentsByMonth,
     schemesByCategory,
   ] = await Promise.all([
+    Application.countDocuments(),
+
+    User.countDocuments(),
+
+    Scheme.countDocuments(),
+
+    Payment.countDocuments(),
+
+    Application.countDocuments({
+      status: "APPROVED",
+    }),
+
+    Application.countDocuments({
+      status: "REJECTED",
+    }),
+
+    Application.countDocuments({
+      status: "PAID",
+    }),
+
     Application.aggregate([
       {
         $group: {
@@ -33,11 +62,13 @@ export const getDashboardAnalytics = async () => {
               $year: "$createdAt",
             },
           },
+
           count: {
             $sum: 1,
           },
         },
       },
+
       {
         $sort: {
           "_id.year": 1,
@@ -50,6 +81,7 @@ export const getDashboardAnalytics = async () => {
       {
         $group: {
           _id: "$role",
+
           count: {
             $sum: 1,
           },
@@ -64,18 +96,22 @@ export const getDashboardAnalytics = async () => {
             month: {
               $month: "$paymentDate",
             },
+
             year: {
               $year: "$paymentDate",
             },
           },
+
           totalAmount: {
             $sum: "$amount",
           },
+
           count: {
             $sum: 1,
           },
         },
       },
+
       {
         $sort: {
           "_id.year": 1,
@@ -88,17 +124,23 @@ export const getDashboardAnalytics = async () => {
       {
         $lookup: {
           from: "schemecategories",
+
           localField: "categoryId",
+
           foreignField: "_id",
+
           as: "category",
         },
       },
+
       {
         $unwind: "$category",
       },
+
       {
         $group: {
           _id: "$category.categoryName",
+
           count: {
             $sum: 1,
           },
@@ -108,10 +150,30 @@ export const getDashboardAnalytics = async () => {
   ]);
 
   return {
+    summary: {
+      totalApplications,
+
+      totalUsers,
+
+      totalSchemes,
+
+      totalPayments,
+
+      approvedApplications,
+
+      rejectedApplications,
+
+      paidApplications,
+    },
+
     applicationsByStatus,
+
     applicationsByMonth,
+
     usersByRole,
+
     paymentsByMonth,
+
     schemesByCategory,
   };
 };

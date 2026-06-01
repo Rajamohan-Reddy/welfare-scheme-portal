@@ -326,21 +326,30 @@ export const getOfficersList = async () => {
 };
 
 export const updateAccountStatus = async (userId, isActive, performedBy) => {
+  const targetUser = await User.findById(userId);
+
+  if (!targetUser) {
+    throw new Error("User not found");
+  }
+
+  // Prevent deactivating another admin
+  if (
+    targetUser.role === ROLES.ADMIN &&
+    targetUser._id.toString() !== performedBy.toString()
+  ) {
+    throw new Error("Cannot modify another admin account");
+  }
+
   const user = await User.findByIdAndUpdate(
     userId,
     {
       isActive,
-
       deactivatedAt: isActive ? null : new Date(),
     },
     {
       new: true,
     },
   );
-
-  if (!user) {
-    throw new Error("User not found");
-  }
 
   await createAuditLog({
     module: AUDIT_MODULES.USER,

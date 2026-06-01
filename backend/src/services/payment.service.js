@@ -100,3 +100,39 @@ export const getPaymentById = async (paymentId) => {
 
   return payment;
 };
+
+export const getPaymentAnalytics = async () => {
+  const [totalPayments, successfulPayments, totalDisbursed] = await Promise.all(
+    [
+      Payment.countDocuments(),
+
+      Payment.countDocuments({
+        paymentStatus: "SUCCESS",
+      }),
+
+      Payment.aggregate([
+        {
+          $match: {
+            paymentStatus: "SUCCESS",
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            total: {
+              $sum: "$amount",
+            },
+          },
+        },
+      ]),
+    ],
+  );
+
+  return {
+    totalPayments,
+
+    successfulPayments,
+
+    totalDisbursed: totalDisbursed?.[0]?.total || 0,
+  };
+};

@@ -30,6 +30,7 @@ import { swaggerSpec } from "./config/swagger.config.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 import healthRoutes from "./routes/health.routes.js";
 import authRoutes from "./routes/auth.routes.js";
+import userRoutes from "./routes/user.routes.js";
 import schemeRoutes from "./routes/scheme.routes.js";
 import schemeCategoryRoutes from "./routes/scheme-category.routes.js";
 import applicationRoutes from "./routes/application.routes.js";
@@ -44,7 +45,7 @@ import dashboardAnalyticsRoutes from "./routes/dashboard-analytics.routes.js";
 import auditLogRoutes from "./routes/audit-log.routes.js";
 import profileRoutes from "./routes/profile.routes.js";
 import applicationManagementRoutes from "./routes/application-management.routes.js";
-
+import userManagementRoutes from "./routes/user-management.routes.js";
 const app = express();
 
 app.disable("x-powered-by");
@@ -82,6 +83,8 @@ app.use(
   authRoutes,
 );
 
+app.use("/api/v1/users", userRoutes);
+
 app.use("/api/v1/schemes", schemeRoutes);
 
 app.use("/api/v1/scheme-categories", schemeCategoryRoutes);
@@ -112,6 +115,7 @@ app.use("/api/v1/profile", profileRoutes);
 
 app.use("/api/v1/application-management", applicationManagementRoutes);
 
+app.use("/api/v1/users", userManagementRoutes);
 app.use(
   "/api-docs",
 

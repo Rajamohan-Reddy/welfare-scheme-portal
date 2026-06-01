@@ -1,7 +1,7 @@
 import { Application } from "../models/application.model.js";
 import { ApplicationTimeline } from "../models/application-timeline.model.js";
 import { Scheme } from "../models/scheme.model.js";
-
+import { User } from "../models/user.model.js";
 import { createNotification } from "./notification.service.js";
 
 import { createAuditLog } from "./audit-log.service.js";
@@ -90,4 +90,61 @@ export const getApplicationById = async ({ applicationId, userId, role }) => {
   }
 
   return application;
+};
+
+export const getApplications = async ({
+  page = 1,
+  limit = 10,
+  status,
+  schemeId,
+  citizenId,
+  applicationNumber,
+}) => {
+  const filter = {};
+
+  if (status) {
+    filter.status = status;
+  }
+
+  if (schemeId) {
+    filter.schemeId = schemeId;
+  }
+
+  if (citizenId) {
+    filter.citizenId = citizenId;
+  }
+
+  if (applicationNumber) {
+    filter.applicationNumber = {
+      $regex: applicationNumber,
+      $options: "i",
+    };
+  }
+
+  const [applications, total] = await Promise.all([
+    Application.find(filter)
+      .populate("citizenId", "firstName lastName email phoneNumber")
+      .populate("schemeId", "schemeName schemeCode")
+      .sort({
+        createdAt: -1,
+      })
+      .skip((page - 1) * limit)
+      .limit(limit),
+
+    Application.countDocuments(filter),
+  ]);
+
+  return {
+    applications,
+
+    pagination: {
+      total,
+
+      page,
+
+      limit,
+
+      totalPages: Math.ceil(total / limit),
+    },
+  };
 };

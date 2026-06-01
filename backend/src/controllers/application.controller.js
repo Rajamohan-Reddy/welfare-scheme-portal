@@ -2,6 +2,7 @@ import {
   createApplication,
   getCitizenApplications,
   getApplicationById,
+  getApplications,
 } from "../services/application.service.js";
 
 import { validateCreateApplication } from "../validators/application.validator.js";
@@ -72,6 +73,34 @@ export const getById = async (req, res) => {
     return successResponse({
       res,
       data: application,
+    });
+  } catch (error) {
+    return errorResponse({
+      res,
+      message: error.message,
+    });
+  }
+};
+
+export const getAllApplications = async (req, res) => {
+  try {
+    const data = await getApplications({
+      page: Number(req.query.page) || 1,
+
+      limit: Number(req.query.limit) || 10,
+
+      status: req.query.status,
+
+      schemeId: req.query.schemeId,
+
+      citizenId: req.query.citizenId,
+
+      applicationNumber: req.query.applicationNumber,
+    });
+
+    return successResponse({
+      res,
+      data,
     });
   } catch (error) {
     return errorResponse({

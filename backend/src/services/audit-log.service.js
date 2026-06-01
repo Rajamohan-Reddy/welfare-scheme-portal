@@ -23,6 +23,8 @@ export const createAuditLog = async ({
 export const getAuditLogs = async ({
   module,
   action,
+  from,
+  to,
   page = 1,
   limit = 20,
 }) => {
@@ -36,13 +38,44 @@ export const getAuditLogs = async ({
     filter.action = action;
   }
 
-  return await AuditLog.find(filter)
-    .populate("performedBy", "firstName lastName role")
-    .sort({
-      createdAt: -1,
-    })
-    .skip((page - 1) * limit)
-    .limit(limit);
+  // ADD HERE
+  if (from || to) {
+    filter.createdAt = {};
+
+    if (from) {
+      filter.createdAt.$gte = new Date(from);
+    }
+
+    if (to) {
+      filter.createdAt.$lte = new Date(to);
+    }
+  }
+
+  const [logs, total] = await Promise.all([
+    AuditLog.find(filter)
+      .populate("performedBy", "firstName lastName role")
+      .sort({
+        createdAt: -1,
+      })
+      .skip((page - 1) * limit)
+      .limit(limit),
+
+    AuditLog.countDocuments(filter),
+  ]);
+
+  return {
+    logs,
+
+    pagination: {
+      total,
+
+      page,
+
+      limit,
+
+      totalPages: Math.ceil(total / limit),
+    },
+  };
 };
 
 export const getRecentAuditLogs = async (limit = 10) => {

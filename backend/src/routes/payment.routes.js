@@ -4,6 +4,7 @@ import {
   processPayment,
   getPayments,
   getPayment,
+  analytics,
 } from "../controllers/payment.controller.js";
 
 import { authenticate, authorize } from "../middleware/auth.middleware.js";
@@ -22,5 +23,7 @@ router.post(
   authorize(ROLES.ADMIN),
   processPayment,
 );
+
+router.get("/analytics", authenticate, authorize(ROLES.ADMIN), analytics);
 
 export default router;

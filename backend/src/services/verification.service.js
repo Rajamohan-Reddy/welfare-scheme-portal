@@ -307,3 +307,102 @@ export const rejectApplication = async ({
 
   return application;
 };
+
+export const getPendingVerificationApplications = async ({
+  page = 1,
+  limit = 10,
+}) => {
+  const filter = {
+    status: "SUBMITTED",
+  };
+
+  const [applications, total] = await Promise.all([
+    Application.find(filter)
+      .populate("citizenId", "firstName lastName phoneNumber")
+      .populate("schemeId", "schemeName schemeCode")
+      .sort({
+        createdAt: -1,
+      })
+      .skip((page - 1) * limit)
+      .limit(limit),
+
+    Application.countDocuments(filter),
+  ]);
+
+  return {
+    applications,
+
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
+};
+
+export const getDocumentVerifiedApplications = async ({
+  page = 1,
+  limit = 10,
+}) => {
+  const filter = {
+    status: "DOCUMENT_VERIFIED",
+  };
+
+  const [applications, total] = await Promise.all([
+    Application.find(filter)
+      .populate("citizenId", "firstName lastName")
+      .populate("schemeId", "schemeName")
+      .sort({
+        createdAt: -1,
+      })
+      .skip((page - 1) * limit)
+      .limit(limit),
+
+    Application.countDocuments(filter),
+  ]);
+
+  return {
+    applications,
+
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
+};
+
+export const getFieldVerifiedApplications = async ({
+  page = 1,
+  limit = 10,
+}) => {
+  const filter = {
+    status: "FIELD_VERIFIED",
+  };
+
+  const [applications, total] = await Promise.all([
+    Application.find(filter)
+      .populate("citizenId", "firstName lastName")
+      .populate("schemeId", "schemeName")
+      .sort({
+        createdAt: -1,
+      })
+      .skip((page - 1) * limit)
+      .limit(limit),
+
+    Application.countDocuments(filter),
+  ]);
+
+  return {
+    applications,
+
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
+  };
+};

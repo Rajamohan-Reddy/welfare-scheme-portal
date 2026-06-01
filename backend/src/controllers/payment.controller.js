@@ -2,6 +2,7 @@ import {
   releasePayment,
   getAllPayments,
   getPaymentById,
+  getPaymentAnalytics,
 } from "../services/payment.service.js";
 
 import { successResponse, errorResponse } from "../utils/api-response.js";
@@ -50,6 +51,22 @@ export const getPayment = async (req, res) => {
     return successResponse({
       res,
       data: payment,
+    });
+  } catch (error) {
+    return errorResponse({
+      res,
+      message: error.message,
+    });
+  }
+};
+
+export const analytics = async (req, res) => {
+  try {
+    const data = await getPaymentAnalytics();
+
+    return successResponse({
+      res,
+      data,
     });
   } catch (error) {
     return errorResponse({

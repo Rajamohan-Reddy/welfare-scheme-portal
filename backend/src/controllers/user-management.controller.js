@@ -1,26 +1,26 @@
 import {
-  getAdminApplications,
-  getAdminApplicationById,
-  getApplicationStatistics,
-} from "../services/admin-application.service.js";
+  getAllUsers,
+  getUserById,
+  getUserStatistics,
+} from "../services/user-management.service.js";
 
 import { successResponse, errorResponse } from "../utils/api-response.js";
 
-export const getApplications = async (req, res) => {
+export const getUsers = async (req, res) => {
   try {
-    const applications = await getAdminApplications({
-      status: req.query.status,
-
-      search: req.query.search,
-
+    const users = await getAllUsers({
       page: Number(req.query.page) || 1,
 
       limit: Number(req.query.limit) || 20,
+
+      role: req.query.role,
+
+      isActive: req.query.isActive,
     });
 
     return successResponse({
       res,
-      data: applications,
+      data: users,
     });
   } catch (error) {
     return errorResponse({
@@ -30,13 +30,13 @@ export const getApplications = async (req, res) => {
   }
 };
 
-export const getApplication = async (req, res) => {
+export const getUser = async (req, res) => {
   try {
-    const application = await getAdminApplicationById(req.params.id);
+    const user = await getUserById(req.params.id);
 
     return successResponse({
       res,
-      data: application,
+      data: user,
     });
   } catch (error) {
     return errorResponse({
@@ -48,7 +48,7 @@ export const getApplication = async (req, res) => {
 
 export const statistics = async (req, res) => {
   try {
-    const data = await getApplicationStatistics();
+    const data = await getUserStatistics();
 
     return successResponse({
       res,

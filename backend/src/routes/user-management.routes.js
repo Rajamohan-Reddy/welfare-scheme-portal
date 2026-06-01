@@ -1,10 +1,10 @@
 import express from "express";
 
 import {
-  getApplications,
-  getApplication,
+  getUsers,
+  getUser,
   statistics,
-} from "../controllers/admin-application.controller.js";
+} from "../controllers/user-management.controller.js";
 
 import { authenticate, authorize } from "../middleware/auth.middleware.js";
 
@@ -12,10 +12,10 @@ import { ROLES } from "../constants/roles.constants.js";
 
 const router = express.Router();
 
-router.get("/", authenticate, authorize(ROLES.ADMIN), getApplications);
+router.get("/", authenticate, authorize(ROLES.ADMIN), getUsers);
 
 router.get("/statistics", authenticate, authorize(ROLES.ADMIN), statistics);
 
-router.get("/:id", authenticate, authorize(ROLES.ADMIN), getApplication);
+router.get("/:id", authenticate, authorize(ROLES.ADMIN), getUser);
 
 export default router;

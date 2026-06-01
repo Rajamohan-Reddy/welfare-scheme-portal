@@ -12,6 +12,10 @@ export const getLogs = async (req, res) => {
 
       action: req.query.action,
 
+      from: req.query.from,
+
+      to: req.query.to,
+
       page: Number(req.query.page) || 1,
 
       limit: Number(req.query.limit) || 20,
