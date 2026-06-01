@@ -16,6 +16,8 @@ export const getUsers = async (req, res) => {
       role: req.query.role,
 
       isActive: req.query.isActive,
+
+      search: req.query.search,
     });
 
     return successResponse({

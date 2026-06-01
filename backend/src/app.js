@@ -12,8 +12,6 @@ import { apiRateLimiter } from "./middleware/rate-limit.middleware.js";
 
 import { authRateLimiter } from "./middleware/rate-limit.middleware.js";
 
-import officerApplicationRoutes from "./routes/officer-application.routes.js";
-
 import "./docs/auth.docs.js";
 import "./docs/scheme-category.docs.js";
 import "./docs/scheme.docs.js";
@@ -44,8 +42,12 @@ import adminApplicationRoutes from "./routes/admin-application.routes.js";
 import dashboardAnalyticsRoutes from "./routes/dashboard-analytics.routes.js";
 import auditLogRoutes from "./routes/audit-log.routes.js";
 import profileRoutes from "./routes/profile.routes.js";
+import officerApplicationRoutes from "./routes/officer-application.routes.js";
+import officerRoutes from "./routes/officer.routes.js";
 import applicationManagementRoutes from "./routes/application-management.routes.js";
 import userManagementRoutes from "./routes/user-management.routes.js";
+import adminRoutes from "./routes/admin.routes.js";
+
 const app = express();
 
 app.disable("x-powered-by");
@@ -115,7 +117,10 @@ app.use("/api/v1/profile", profileRoutes);
 
 app.use("/api/v1/application-management", applicationManagementRoutes);
 
+app.use("/api/v1/officer", officerRoutes);
+
 app.use("/api/v1/users", userManagementRoutes);
+
 app.use(
   "/api-docs",
 

@@ -1,7 +1,13 @@
 import { User } from "../models/user.model.js";
 import { ROLES } from "../constants/roles.constants.js";
 
-export const getAllUsers = async ({ page = 1, limit = 20, role, isActive }) => {
+export const getAllUsers = async ({
+  page = 1,
+  limit = 20,
+  role,
+  isActive,
+  search,
+}) => {
   const filter = {};
 
   if (role) {
@@ -12,21 +18,56 @@ export const getAllUsers = async ({ page = 1, limit = 20, role, isActive }) => {
     filter.isActive = isActive === "true";
   }
 
-  const users = await User.find(filter)
-    .select("-password -refreshToken")
-    .sort({
-      createdAt: -1,
-    })
-    .skip((page - 1) * limit)
-    .limit(limit);
+  if (search) {
+    filter.$or = [
+      {
+        firstName: {
+          $regex: search,
+          $options: "i",
+        },
+      },
+      {
+        lastName: {
+          $regex: search,
+          $options: "i",
+        },
+      },
+      {
+        email: {
+          $regex: search,
+          $options: "i",
+        },
+      },
+      {
+        phoneNumber: {
+          $regex: search,
+          $options: "i",
+        },
+      },
+    ];
+  }
 
-  const total = await User.countDocuments(filter);
+  const [users, total] = await Promise.all([
+    User.find(filter)
+      .select("-password -refreshToken")
+      .sort({
+        createdAt: -1,
+      })
+      .skip((page - 1) * limit)
+      .limit(limit),
+
+    User.countDocuments(filter),
+  ]);
 
   return {
     users,
-    total,
-    page,
-    limit,
+
+    pagination: {
+      total,
+      page,
+      limit,
+      totalPages: Math.ceil(total / limit),
+    },
   };
 };
 
@@ -74,10 +115,15 @@ export const getUserStatistics = async () => {
 
   return {
     totalUsers,
+
     totalCitizens,
+
     totalOfficers,
+
     totalAdmins,
+
     activeUsers,
+
     inactiveUsers,
   };
 };
