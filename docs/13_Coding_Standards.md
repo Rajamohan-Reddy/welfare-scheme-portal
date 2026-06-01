@@ -1,246 +1,132 @@
 # Coding Standards
 
-## Purpose
+## General Rules
 
-This document defines coding standards and development guidelines for the Welfare Scheme Portal.
-
-All team members must follow these standards.
-
----
-
-# General Principles
-
-1. Write Clean Code
-
-2. Keep Code Readable
-
-3. Avoid Duplicate Logic
-
-4. Follow Consistent Naming
-
-5. Use Meaningful Variable Names
+- Use ES Modules
+- Use async/await
+- Avoid nested callbacks
+- Follow Controller-Service-Model pattern
+- Keep business logic inside services
 
 ---
 
-# File Naming Convention
+## Naming Standards
 
-Use lowercase with dots.
-
-Examples:
-
-auth.routes.js
+### Files
 
 auth.controller.js
 
-application.service.js
+auth.service.js
 
-user.model.js
+auth.routes.js
 
----
+auth.validator.js
 
-# Variable Naming
-
-Use camelCase.
-
-Correct:
-
-applicationNumber
-
-schemeName
-
-userRole
-
-Incorrect:
-
-application_number
-
-SchemeName
-
-USER_ROLE
+auth.middleware.js
 
 ---
 
-# Constants Naming
+### Constants
 
-Use UPPER_CASE.
+UPPER_SNAKE_CASE
+
+Example:
+
+APPLICATION_STATUS
+
+ROLES
+
+HTTP_STATUS
+
+---
+
+### Functions
+
+camelCase
 
 Examples:
 
-ADMIN
+createApplication
 
-OFFICER
+approveApplication
 
-CITIZEN
+releasePayment
 
-APPROVED
+createNotification
 
-REJECTED
-
----
-
-# Function Naming
-
-Use descriptive names.
-
-Correct:
-
-createApplication()
-
-approveApplication()
-
-verifyApplication()
-
-Incorrect:
-
-save()
-
-process()
-
-run()
+createAuditLog
 
 ---
 
-# Controller Rules
+## API Responses
 
-Controllers should:
+Always use:
 
-- Receive Request
-- Call Service
-- Return Response
+successResponse()
 
-Controllers should NOT:
+errorResponse()
 
-- Contain Database Queries
-- Contain Complex Business Logic
+Never return raw responses directly.
 
 ---
 
-# Service Rules
+## Authentication
 
-Services should:
+All protected APIs must use:
 
-- Handle Business Logic
-- Process Workflow Rules
-- Validate Business Conditions
+authenticate
+
+Role-based APIs must additionally use:
+
+authorize
+
+---
+
+## Audit Logging
+
+All critical business actions should generate audit logs.
 
 Examples:
 
-Approve Application
-
-Assign Officer
-
-Create Notification
-
----
-
-# Model Rules
-
-Models should only define:
-
-- Schema
-- Indexes
-- Relationships
-
-No business logic inside models.
+- Login
+- Logout
+- Scheme Create
+- Scheme Update
+- Scheme Delete
+- Application Submit
+- Verification Actions
+- Payment Release
 
 ---
 
-# Error Handling
+## Notifications
 
-Use centralized error handling.
-
-Do not repeat:
-
-try-catch blocks everywhere unnecessarily.
-
-Use standard error responses.
-
----
-
-# API Response Standards
-
-Success:
-
-{
-"success": true,
-"message": "Success",
-"data": {}
-}
-
-Error:
-
-{
-"success": false,
-"message": "Error",
-"errors": []
-}
-
----
-
-# Comments
-
-Write comments only when necessary.
-
-Avoid obvious comments.
-
-Bad:
-
-// increment count
-
-count++
-
-Good:
-
-// Generate unique application number based on year and sequence
-
----
-
-# Git Commit Standards
-
-Use meaningful commit messages.
+All citizen-facing workflow events should generate notifications.
 
 Examples:
 
-feat: add authentication module
-
-feat: add scheme management APIs
-
-fix: resolve login validation issue
-
-docs: update database design
-
-refactor: improve application service
+- Application Submitted
+- Verification Completed
+- Approval
+- Rejection
+- Payment Released
 
 ---
 
-# Pull Request Standards
+## Database Standards
 
-Before merging:
-
-✓ Code Compiles
-
-✓ Tests Pass
-
-✓ No Console Errors
-
-✓ Documentation Updated
-
-✓ README Updated
+- Use indexes where required
+- Use references for relationships
+- Avoid embedding large datasets
+- Use timestamps on all collections
 
 ---
 
-# Project Rule
+## Documentation Standards
 
-Whenever a new feature is added:
+Every route must have:
 
-1. Update Documentation
-
-2. Update README
-
-3. Update API Contracts
-
-4. Commit Changes
-
-Documentation must always match the latest implementation.
-
-This rule is mandatory for all team members.
+- Swagger Documentation
+- Request Example
+- Response Example
+- Authorization Information

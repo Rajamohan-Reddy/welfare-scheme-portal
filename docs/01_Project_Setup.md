@@ -16,9 +16,9 @@ Administrators can manage schemes, officers, dashboard reports, and monitor over
 
 ## Team Members
 
-- Raja (Team Lead / Backend Developer)
-- Naveen (Frontend Developer)
-- Kathir (Frontend & Testing Support)
+- Raja
+- Naveen
+- Kathir
 
 ## Company
 

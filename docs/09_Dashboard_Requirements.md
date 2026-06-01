@@ -1,174 +1,67 @@
 # Dashboard Requirements
 
-## Overview
+## Admin Dashboard
 
-The portal provides dashboards for:
+Metrics
 
-1. Citizen
-2. Officer
-3. Admin
-
-Dashboard data is generated dynamically from database records.
-
----
-
-# Citizen Dashboard
-
-## Statistics Cards
-
+- Total Users
+- Total Citizens
+- Total Officers
+- Total Schemes
 - Total Applications
 - Approved Applications
 - Rejected Applications
 - Pending Applications
+- Total Payments Released
+
+Charts
+
+- Applications by Status
+- Applications by Scheme
+- Monthly Applications
+- Monthly Payments
+
+Recent Activities
+
+- Latest Applications
+- Latest Approvals
+- Latest Payments
+- Latest Audit Logs
 
 ---
 
-## Pie Chart
+## Officer Dashboard
 
-My Application Status Distribution
+Metrics
 
-Statuses:
-
-- Approved
-- Rejected
-- Under Verification
-- Correction Required
-
----
-
-## Recent Applications Table
-
-Columns:
-
-- Application Number
-- Scheme Name
-- Status
-- Submitted Date
-
----
-
-# Officer Dashboard
-
-## Statistics Cards
-
-- Assigned Applications
+- Applications Assigned
+- Document Verified
+- Field Verified
 - Pending Verification
+
+Recent Activities
+
+- Recently Verified Applications
+- Pending Verification Queue
+
+---
+
+## Citizen Dashboard
+
+Metrics
+
+- Applied Schemes
 - Approved Applications
 - Rejected Applications
+- Payments Received
 
----
+Recent Activities
 
-## Pie Chart
+- Latest Notifications
+- Recent Applications
 
-Verification Status Distribution
+Quick Actions
 
----
-
-## Bar Chart
-
-Daily Application Processing
-
-Columns:
-
-- Date
-- Applications Processed
-
----
-
-## Applications Table
-
-Columns:
-
-- Application Number
-- Applicant Name
-- Scheme Name
-- Status
-- Submitted Date
-
----
-
-# Admin Dashboard
-
-## Statistics Cards
-
-- Total Users
-- Total Admins
-- Total Officers
-- Total Citizens
-- Active Users
-- Inactive Users
-- Total Schemes
-- Total Applications
-
----
-
-## Pie Chart
-
-Application Status Distribution
-
-Statuses:
-
-- Approved
-- Rejected
-- Under Verification
-- Correction Required
-
----
-
-## Bar Chart
-
-Scheme Wise Applications
-
-Examples:
-
-- Amma Vodi
-- Pension Scheme
-- Scholarship Scheme
-- Housing Scheme
-
----
-
-## Monthly Trend Chart
-
-Applications Submitted Per Month
-
----
-
-## Recent Applications Table
-
-Columns:
-
-- Application Number
-- Applicant Name
-- Scheme Name
-- Assigned Officer
-- Status
-- Submitted Date
-
----
-
-# Dashboard APIs
-
-Citizen Dashboard
-
-GET /api/v1/dashboard/citizen
-
----
-
-Officer Dashboard
-
-GET /api/v1/dashboard/officer
-
----
-
-Admin Dashboard
-
-GET /api/v1/dashboard/admin
-
----
-
-# Analytics Strategy
-
-Dashboard values are generated using MongoDB Aggregation Pipelines.
-
-Dashboard data is never stored separately.
+- Browse Schemes
+- Apply Scheme
+- Track Application

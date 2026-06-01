@@ -6,226 +6,132 @@
 
 ---
 
-# Standard Success Response
+## Authentication
+
+POST /auth/register
+
+POST /auth/login
+
+POST /auth/logout
+
+POST /auth/refresh-token
+
+GET /auth/me
+
+---
+
+## Scheme Categories
+
+GET /scheme-categories
+
+GET /scheme-categories/:id
+
+POST /scheme-categories
+
+PUT /scheme-categories/:id
+
+DELETE /scheme-categories/:id
+
+---
+
+## Schemes
+
+GET /schemes
+
+GET /schemes/:id
+
+POST /schemes
+
+PUT /schemes/:id
+
+DELETE /schemes/:id
+
+---
+
+## Applications
+
+POST /applications
+
+GET /applications/my-applications
+
+GET /applications/:id
+
+---
+
+## Verification
+
+PATCH /verifications/:id/document-verify
+
+PATCH /verifications/:id/field-verify
+
+PATCH /verifications/:id/approve
+
+PATCH /verifications/:id/reject
+
+---
+
+## Payments
+
+GET /payments
+
+GET /payments/:id
+
+POST /payments/release/:applicationId
+
+---
+
+## Notifications
+
+GET /notifications
+
+PATCH /notifications/:id/read
+
+---
+
+## Uploads
+
+POST /uploads/image
+
+POST /uploads/document
+
+POST /uploads/multiple
+
+---
+
+## Dashboard
+
+GET /dashboard/admin
+
+GET /dashboard/officer
+
+GET /dashboard/citizen
+
+---
+
+## Reports
+
+GET /reports/applications
+
+GET /reports/payments
+
+GET /reports/schemes
+
+---
+
+## Response Format
+
+Success Response
 
 {
 "success": true,
-"message": "Operation completed successfully",
+"message": "Success",
 "data": {}
 }
 
----
-
-# Standard Error Response
+Error Response
 
 {
 "success": false,
-"message": "Error message",
+"message": "Error Message",
 "errors": []
 }
-
----
-
-# Authentication Module
-
-## Register Citizen
-
-POST
-
-/api/v1/auth/register
-
-Request
-
-{
-"firstName": "Raja",
-"lastName": "K",
-"email": "[raja@gmail.com](mailto:raja@gmail.com)",
-"password": "Password@123",
-"phoneNumber": "9876543210",
-"aadhaarNumber": "123456789012"
-}
-
-Response
-
-{
-"success": true,
-"message": "User registered successfully"
-}
-
----
-
-## Login
-
-POST
-
-/api/v1/auth/login
-
-Request
-
-{
-"email": "[raja@gmail.com](mailto:raja@gmail.com)",
-"password": "Password@123"
-}
-
-Response
-
-{
-"success": true,
-"token": "JWT_TOKEN"
-}
-
----
-
-# Schemes Module
-
-## Get All Schemes
-
-GET
-
-/api/v1/schemes
-
----
-
-## Get Scheme By ID
-
-GET
-
-/api/v1/schemes/:id
-
----
-
-## Create Scheme
-
-POST
-
-/api/v1/schemes
-
-Admin Only
-
----
-
-## Update Scheme
-
-PUT
-
-/api/v1/schemes/:id
-
-Admin Only
-
----
-
-## Delete Scheme
-
-DELETE
-
-/api/v1/schemes/:id
-
-Admin Only
-
----
-
-# Applications Module
-
-## Submit Application
-
-POST
-
-/api/v1/applications
-
-Citizen Only
-
----
-
-## Get My Applications
-
-GET
-
-/api/v1/applications/my
-
-Citizen Only
-
----
-
-## Get Application By ID
-
-GET
-
-/api/v1/applications/:id
-
----
-
-## Update Application
-
-PUT
-
-/api/v1/applications/:id
-
-Before Verification Only
-
----
-
-# Verification Module
-
-## Verify Application
-
-PATCH
-
-/api/v1/applications/:id/verify
-
-Officer/Admin
-
----
-
-## Approve Application
-
-PATCH
-
-/api/v1/applications/:id/approve
-
-Officer/Admin
-
----
-
-## Reject Application
-
-PATCH
-
-/api/v1/applications/:id/reject
-
-Officer/Admin
-
----
-
-## Request Correction
-
-PATCH
-
-/api/v1/applications/:id/correction
-
-Officer/Admin
-
----
-
-# Dashboard Module
-
-## Admin Dashboard
-
-GET
-
-/api/v1/dashboard/admin
-
----
-
-## Officer Dashboard
-
-GET
-
-/api/v1/dashboard/officer
-
----
-
-## Citizen Dashboard
-
-GET
-
-/api/v1/dashboard/citizen
