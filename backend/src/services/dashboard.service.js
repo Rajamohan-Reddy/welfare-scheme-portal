@@ -115,3 +115,155 @@ export const getCitizenDashboard = async (citizenId) => {
     rejectedApplications,
   };
 };
+
+export const getApplicationStatusChart = async () => {
+  const [submitted, documentVerified, fieldVerified, approved, rejected, paid] =
+    await Promise.all([
+      Application.countDocuments({
+        status: "SUBMITTED",
+      }),
+
+      Application.countDocuments({
+        status: "DOCUMENT_VERIFIED",
+      }),
+
+      Application.countDocuments({
+        status: "FIELD_VERIFIED",
+      }),
+
+      Application.countDocuments({
+        status: "APPROVED",
+      }),
+
+      Application.countDocuments({
+        status: "REJECTED",
+      }),
+
+      Application.countDocuments({
+        status: "PAID",
+      }),
+    ]);
+
+  return [
+    {
+      name: "Submitted",
+      value: submitted,
+    },
+
+    {
+      name: "Document Verified",
+      value: documentVerified,
+    },
+
+    {
+      name: "Field Verified",
+      value: fieldVerified,
+    },
+
+    {
+      name: "Approved",
+      value: approved,
+    },
+
+    {
+      name: "Rejected",
+      value: rejected,
+    },
+
+    {
+      name: "Paid",
+      value: paid,
+    },
+  ];
+};
+export const getMonthlyApplicationsChart = async () => {
+  const result = await Application.aggregate([
+    {
+      $group: {
+        _id: {
+          month: {
+            $month: "$createdAt",
+          },
+        },
+
+        applications: {
+          $sum: 1,
+        },
+      },
+    },
+
+    {
+      $sort: {
+        "_id.month": 1,
+      },
+    },
+  ]);
+
+  const monthNames = [
+    "",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  return result.map((item) => ({
+    month: monthNames[item._id.month],
+
+    applications: item.applications,
+  }));
+};
+
+export const getSchemeWiseApplications = async () => {
+  return await Application.aggregate([
+    {
+      $lookup: {
+        from: "schemes",
+
+        localField: "schemeId",
+
+        foreignField: "_id",
+
+        as: "scheme",
+      },
+    },
+
+    {
+      $unwind: "$scheme",
+    },
+
+    {
+      $group: {
+        _id: "$scheme.schemeName",
+
+        applications: {
+          $sum: 1,
+        },
+      },
+    },
+
+    {
+      $project: {
+        _id: 0,
+
+        scheme: "$_id",
+
+        applications: 1,
+      },
+    },
+
+    {
+      $sort: {
+        applications: -1,
+      },
+    },
+  ]);
+};

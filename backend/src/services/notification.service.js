@@ -44,3 +44,47 @@ export const markAsRead = async (notificationId, userId) => {
 
   return notification;
 };
+
+export const getUnreadNotificationCount = async (userId) => {
+  return await Notification.countDocuments({
+    userId,
+    isRead: false,
+  });
+};
+
+export const markAllNotificationsAsRead = async (userId) => {
+  await Notification.updateMany(
+    {
+      userId,
+      isRead: false,
+    },
+    {
+      isRead: true,
+    },
+  );
+
+  return true;
+};
+
+/* ADD BELOW */
+
+export const deleteNotification = async (notificationId, userId) => {
+  const notification = await Notification.findOneAndDelete({
+    _id: notificationId,
+    userId,
+  });
+
+  if (!notification) {
+    throw new Error("Notification not found");
+  }
+
+  return true;
+};
+
+export const deleteAllNotifications = async (userId) => {
+  await Notification.deleteMany({
+    userId,
+  });
+
+  return true;
+};

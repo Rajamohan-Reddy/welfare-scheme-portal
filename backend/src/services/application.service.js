@@ -1,5 +1,5 @@
 import { Application } from "../models/application.model.js";
-
+import { ApplicationTimeline } from "../models/application-timeline.model.js";
 import { Scheme } from "../models/scheme.model.js";
 
 import { createNotification } from "./notification.service.js";
@@ -29,39 +29,34 @@ export const createApplication = async ({
 
   const application = await Application.create({
     applicationNumber: generateApplicationNumber(),
-
     citizenId,
-
     schemeId,
-
     documents,
-
     dynamicFormData,
-
     applicantRemarks,
   });
 
   await createAuditLog({
     module: AUDIT_MODULES.APPLICATION,
-
     action: AUDIT_ACTIONS.CREATE,
-
     entityId: application._id,
-
     performedBy: citizenId,
-
     description: `Application ${application.applicationNumber} submitted`,
+  });
+
+  await ApplicationTimeline.create({
+    applicationId: application._id,
+    oldStatus: null,
+    newStatus: application.status,
+    remarks: applicantRemarks || "Application submitted",
+    changedBy: citizenId,
   });
 
   await createNotification({
     userId: citizenId,
-
     title: "Application Submitted",
-
     message: `Your application ${application.applicationNumber} has been submitted successfully.`,
-
     referenceType: "APPLICATION",
-
     referenceId: application._id,
   });
 

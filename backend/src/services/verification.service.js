@@ -1,7 +1,7 @@
 import { Application } from "../models/application.model.js";
 
 import { VerificationHistory } from "../models/verification-history.model.js";
-
+import { ApplicationTimeline } from "../models/application-timeline.model.js";
 import { APPLICATION_STATUS } from "../constants/application.constants.js";
 
 import { VERIFICATION_ACTIONS } from "../constants/verification.constants.js";
@@ -32,6 +32,18 @@ export const documentVerifyApplication = async ({
   application.verifiedBy = officerId;
 
   await application.save();
+
+  await ApplicationTimeline.create({
+    applicationId: application._id,
+
+    oldStatus: APPLICATION_STATUS.SUBMITTED,
+
+    newStatus: APPLICATION_STATUS.DOCUMENT_VERIFIED,
+
+    remarks: remarks || "Documents verified",
+
+    changedBy: officerId,
+  });
 
   await VerificationHistory.create({
     applicationId,
@@ -92,6 +104,18 @@ export const fieldVerifyApplication = async ({
   application.officerRemarks = remarks;
 
   await application.save();
+
+  await ApplicationTimeline.create({
+    applicationId: application._id,
+
+    oldStatus: APPLICATION_STATUS.DOCUMENT_VERIFIED,
+
+    newStatus: APPLICATION_STATUS.FIELD_VERIFIED,
+
+    remarks: remarks || "Field verification completed",
+
+    changedBy: officerId,
+  });
 
   await VerificationHistory.create({
     applicationId,
@@ -157,6 +181,18 @@ export const approveApplication = async ({
 
   await application.save();
 
+  await ApplicationTimeline.create({
+    applicationId: application._id,
+
+    oldStatus: APPLICATION_STATUS.FIELD_VERIFIED,
+
+    newStatus: APPLICATION_STATUS.APPROVED,
+
+    remarks: remarks || "Application approved",
+
+    changedBy: adminId,
+  });
+
   await VerificationHistory.create({
     applicationId,
 
@@ -218,6 +254,18 @@ export const rejectApplication = async ({
   application.rejectionReason = remarks;
 
   await application.save();
+
+  await ApplicationTimeline.create({
+    applicationId: application._id,
+
+    oldStatus: previousStatus,
+
+    newStatus: APPLICATION_STATUS.REJECTED,
+
+    remarks: remarks || "Application rejected",
+
+    changedBy: adminId,
+  });
 
   await VerificationHistory.create({
     applicationId,

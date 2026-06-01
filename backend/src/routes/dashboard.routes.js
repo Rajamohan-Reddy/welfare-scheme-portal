@@ -4,6 +4,9 @@ import {
   adminDashboard,
   officerDashboard,
   citizenDashboard,
+  applicationStatusChart,
+  monthlyApplicationsChart,
+  schemeWiseApplications,
 } from "../controllers/dashboard.controller.js";
 
 import { authenticate, authorize } from "../middleware/auth.middleware.js";
@@ -26,6 +29,27 @@ router.get(
   authenticate,
   authorize(ROLES.CITIZEN),
   citizenDashboard,
+);
+
+router.get(
+  "/application-status-chart",
+  authenticate,
+  authorize(ROLES.ADMIN, ROLES.OFFICER),
+  applicationStatusChart,
+);
+
+router.get(
+  "/monthly-applications-chart",
+  authenticate,
+  authorize(ROLES.ADMIN, ROLES.OFFICER),
+  monthlyApplicationsChart,
+);
+
+router.get(
+  "/scheme-wise-applications",
+  authenticate,
+  authorize(ROLES.ADMIN, ROLES.OFFICER),
+  schemeWiseApplications,
 );
 
 export default router;
