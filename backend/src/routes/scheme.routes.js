@@ -14,7 +14,7 @@ import { ROLES } from "../constants/roles.constants.js";
 
 const router = express.Router();
 
-router.get("/", authenticate, getAll);
+router.get("/", getAll);
 
 router.get("/:id", authenticate, getById);
 
