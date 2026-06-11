@@ -32,6 +32,7 @@ import userRoutes from "./routes/user.routes.js";
 import schemeRoutes from "./routes/scheme.routes.js";
 import schemeCategoryRoutes from "./routes/scheme-category.routes.js";
 import applicationRoutes from "./routes/application.routes.js";
+import applicationTrackingRoutes from "./routes/application-tracking.routes.js";
 import verificationRoutes from "./routes/verification.routes.js";
 import paymentRoutes from "./routes/payment.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
@@ -92,6 +93,8 @@ app.use("/api/v1/schemes", schemeRoutes);
 app.use("/api/v1/scheme-categories", schemeCategoryRoutes);
 
 app.use("/api/v1/applications", applicationRoutes);
+
+app.use("/api/v1/application-tracking", applicationTrackingRoutes);
 
 app.use("/api/v1/verifications", verificationRoutes);
 

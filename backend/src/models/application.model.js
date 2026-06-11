@@ -110,14 +110,14 @@ const applicationSchema = new mongoose.Schema(
   },
 );
 
-applicationSchema.index(
-  {
-    applicationNumber: 1,
-  },
-  {
-    unique: true,
-  },
-);
+// applicationSchema.index(
+//   {
+//     applicationNumber: 1,
+//   },
+//   {
+//     unique: true,
+//   },
+// );
 
 applicationSchema.index({
   citizenId: 1,

@@ -6,19 +6,19 @@ import { errorResponse } from "../utils/api-response.js";
 
 import { HTTP_STATUS } from "../constants/http-status.constants.js";
 
+import { COOKIE_NAMES } from "../constants/cookie.constants.js";
+
 export const authenticate = async (req, res, next) => {
   try {
-    const authorizationHeader = req.headers.authorization;
+    const token = req.cookies?.[COOKIE_NAMES.ACCESS_TOKEN];
 
-    if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+    if (!token) {
       return errorResponse({
         res,
         statusCode: HTTP_STATUS.UNAUTHORIZED,
         message: "Authentication token missing",
       });
     }
-
-    const token = authorizationHeader.split(" ")[1];
 
     const decoded = verifyAccessToken(token);
 
@@ -49,9 +49,7 @@ export const authenticate = async (req, res, next) => {
   } catch (error) {
     return errorResponse({
       res,
-
       statusCode: HTTP_STATUS.UNAUTHORIZED,
-
       message: error.message || "Invalid or expired token",
     });
   }

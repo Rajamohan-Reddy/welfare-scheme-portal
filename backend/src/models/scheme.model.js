@@ -185,7 +185,7 @@ const schemeSchema = new mongoose.Schema(
   },
 );
 
-schemeSchema.index({ schemeCode: 1 }, { unique: true });
+// schemeSchema.index({ schemeCode: 1 }, { unique: true });
 
 schemeSchema.index({
   department: 1,

@@ -207,6 +207,19 @@ export const refreshAccessToken = async (refreshToken) => {
 
   return {
     accessToken,
+    user: {
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      phoneNumber: user.phoneNumber,
+      role: user.role,
+      isActive: user.isActive,
+      isProfileCompleted: user.isProfileCompleted,
+      lastLoginAt: user.lastLoginAt,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    },
   };
 };
 

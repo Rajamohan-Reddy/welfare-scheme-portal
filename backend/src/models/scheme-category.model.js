@@ -31,7 +31,7 @@ const schemeCategorySchema = new mongoose.Schema(
   },
 );
 
-schemeCategorySchema.index({ categoryCode: 1 }, { unique: true });
+// schemeCategorySchema.index({ categoryCode: 1 }, { unique: true });
 
 schemeCategorySchema.index({
   isActive: 1,

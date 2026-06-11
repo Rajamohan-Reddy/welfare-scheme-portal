@@ -25,7 +25,11 @@ import { AUTH_MESSAGES } from "../constants/auth-messages.constants.js";
 
 import { COOKIE_NAMES } from "../constants/cookie.constants.js";
 
-import { refreshTokenCookieOptions } from "../utils/cookie-options.js";
+import {
+  accessTokenCookieOptions,
+  refreshTokenCookieOptions,
+  clearCookieOptions,
+} from "../utils/cookie-options.js";
 
 export const register = async (req, res) => {
   try {
@@ -72,6 +76,7 @@ export const login = async (req, res) => {
 
     const { user, accessToken, refreshToken } = await loginUser(req.body);
 
+    res.cookie(COOKIE_NAMES.ACCESS_TOKEN, accessToken, accessTokenCookieOptions);
     res.cookie(
       COOKIE_NAMES.REFRESH_TOKEN,
       refreshToken,
@@ -83,7 +88,6 @@ export const login = async (req, res) => {
       message: AUTH_MESSAGES.LOGIN_SUCCESS,
       data: {
         user,
-        accessToken,
       },
     });
   } catch (error) {
@@ -99,7 +103,8 @@ export const logout = async (req, res) => {
   try {
     await logoutUser(req.user.userId);
 
-    res.clearCookie(COOKIE_NAMES.REFRESH_TOKEN);
+    res.clearCookie(COOKIE_NAMES.ACCESS_TOKEN, clearCookieOptions);
+    res.clearCookie(COOKIE_NAMES.REFRESH_TOKEN, clearCookieOptions);
 
     return successResponse({
       res,
@@ -115,7 +120,7 @@ export const logout = async (req, res) => {
 
 export const refreshToken = async (req, res) => {
   try {
-    const refreshToken = req.cookies?.refreshToken;
+    const refreshToken = req.cookies?.[COOKIE_NAMES.REFRESH_TOKEN];
 
     if (!refreshToken) {
       return errorResponse({
@@ -127,9 +132,17 @@ export const refreshToken = async (req, res) => {
 
     const result = await refreshAccessToken(refreshToken);
 
+    res.cookie(
+      COOKIE_NAMES.ACCESS_TOKEN,
+      result.accessToken,
+      accessTokenCookieOptions,
+    );
+
     return successResponse({
       res,
-      data: result,
+      data: {
+        user: result.user,
+      },
     });
   } catch (error) {
     return errorResponse({

@@ -17,8 +17,16 @@ export const getTimeline = async (req, res) => {
       data: timeline,
     });
   } catch (error) {
+    const statusCode =
+      error.message === "Application not found"
+        ? 404
+        : error.message === "Access denied"
+          ? 403
+          : 500;
+
     return errorResponse({
       res,
+      statusCode,
       message: error.message,
     });
   }
